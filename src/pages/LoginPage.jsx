@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Form, Input, Button, message } from "antd";
 import {  getAllUsers } from "../services/auth"; 
-import img from '../images/saha2.jpg';
+import img from '/images/saha2.jpg';
 import { toast, ToastContainer } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
   const [users, setUsers] = useState([]);
@@ -40,6 +40,7 @@ const LoginPage = () => {
       toast.error("Şifre yanlış.");
       return;
     }
+    localStorage.setItem("currentUser", JSON.stringify(user));
     toast.success("Giriş başarılı!");
     navigate("/main"); 
   };
@@ -96,10 +97,12 @@ const LoginPage = () => {
             </Button>
           </Form.Item>
         </Form>
+
+        <Button style={{marginLeft:'110px',backgroundColor:'lightcyan'}}> <Link to="/" style={{color: "black" ,marginRight:'7px'}}>Hesabın Yok mu?</Link></Button>
       </div>
 
       <ToastContainer autoClose={2000} />
-    </div>
+    </div>  
   );
 };
 

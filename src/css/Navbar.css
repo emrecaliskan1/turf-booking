@@ -1,0 +1,4 @@
+.ant-menu-dark .ant-menu-item-selected {
+    background-color: #1f4a30 !important; /* istediğin rengi yazabilirsin */
+    color: #fff !important;
+  }

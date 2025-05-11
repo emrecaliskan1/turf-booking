@@ -1,0 +1,28 @@
+.reservation-wrapper {
+    background-image: url('/images/saha2.jpg'); /* Kendi arka plan görselin */
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+  }
+  
+  .reservation-card {
+    width: 450px;
+    background-color: rgba(255, 255, 255, 0.85); /* şeffaflık */
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    border-radius: 16px;
+    backdrop-filter: blur(4px);
+    font-size: larger;
+    margin-bottom: '500px';
+
+  }
+  
+  body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+  }

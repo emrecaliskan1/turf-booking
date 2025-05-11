@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Form, Input, Button, message } from "antd";
 import { registerUser, getAllUsers } from "../services/auth"; // API fonksiyonlarını buradan alıyoruz
-import img from '../images/saha2.jpg'
+import img from '/images/saha2.jpg'
 import { toast, ToastContainer } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
 
@@ -29,8 +29,8 @@ const RegisterPage = () => {
     const isUsernameTaken = users.some((user) => user.username === username);
     const isEmailTaken = users.some((user) => user.email === email);
 
-    if (isUsernameTaken) return "Bu kullanıcı adı zaten alınmış.";
-    if (isEmailTaken) return "Bu e-posta zaten kayıtlı.";
+    if (isUsernameTaken) return "Bu kullanıcı adı zaten mevcut...";
+    if (isEmailTaken) return "Bu e-posta zaten mevcut...";
     return null; 
   };
 
@@ -80,7 +80,7 @@ const RegisterPage = () => {
           zIndex: 10, 
         }}
       >
-        <h2 style={{ textAlign: "center", marginBottom: 20 }}>Kullanıcı Oluştur</h2>
+        <h2 style={{ textAlign: "center", marginBottom: 20 }}>Üye Ol</h2>
 
         <Form layout="vertical" onFinish={onFinish} initialValues={{ username: "", email: "", password: "" }}>
 
@@ -107,6 +107,8 @@ const RegisterPage = () => {
           </Form.Item>
 
         </Form>
+
+        <Button style={{marginLeft:'135px',backgroundColor:'lightcyan'}}> <Link to="/login" style={{color: "black" ,marginRight:'7px'}}>Giriş Yap</Link></Button>
 
       </div>
 

@@ -1,13 +1,13 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
-import '../css/FieldReserv.css'
 
-function MainPage() {
+function Basket() {
   return (
     <div>
         <Navbar />
+        <p>basket</p>
     </div>
   )
 }
 
-export default MainPage
+export default Basket
