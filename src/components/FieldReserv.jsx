@@ -1,7 +1,6 @@
 import React from 'react'
 import { Card, Form, Input, Select, DatePicker, TimePicker, Button } from 'antd';
 import { fields } from '../data/Fields';
-import { addReservation } from '../services/reservations';
 import { toast, ToastContainer } from 'react-toastify';
 import '../css/FieldReserv.css'
 
@@ -11,6 +10,14 @@ function FieldReserv() {
 
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
+    //UNIQUE ID OLUŞTURMA
+    const generateUniqueId = () => {
+      const array = new Uint32Array(1);
+      window.crypto.getRandomValues(array);
+      return array[0] % 1000000; 
+    };
+
+    //REZERVASYONU SHEETS'E KAYDET & EKLENEN REZERVASYONU SEPETE KAYDET & SEPET BADGE'İNİ GÜNCELLE
     const handleSubmit = async (values) => {
         const { fieldId, date, timeRange } = values;
         const field = fields.find(field => field.id === fieldId);
@@ -18,8 +25,8 @@ function FieldReserv() {
         const total = hours * field.pricePerHour;
     
         const newReservation = {
-          id: Math.round(Date.now(),4),
-          username:  currentUser?.username || "unknown",
+          id: generateUniqueId(),
+          username:  currentUser?.username,
           fieldName: field.name,
           date: date.format('YYYY-MM-DD'),
           startTime: timeRange[0].format('HH:mm'),
@@ -28,8 +35,14 @@ function FieldReserv() {
         };
     
         try {
-          await addReservation((newReservation)); 
-          toast.success("Rezervasyon başarıyla oluşturuldu");
+          const basket = JSON.parse(localStorage.getItem("basket")) || [];
+          basket.push(newReservation);
+          localStorage.setItem("basket", JSON.stringify(basket));
+          
+          const newCount = basket.length;
+          localStorage.setItem("basketCount", newCount);
+          window.updateBasketCount();
+          toast.success("Rezervasyon sepete eklendi");
           form.resetFields();
         } catch(error) {
           toast.error("Rezervasyon kaydedilemedi");

@@ -18,7 +18,7 @@ export const fields = [
       name: "Adrenalin Halı Saha",
       pricePerHour: 1600,
       availability: ["14:00", "15:00", "16:00", "17:00", "18:00"],
-      images : []
+      images : ['/images/esentepe1.jpg']
       
     },
     {

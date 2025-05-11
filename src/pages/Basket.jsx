@@ -1,13 +1,15 @@
-import React from 'react'
-import Navbar from '../components/Navbar'
+import React from 'react';
+import Navbar from '../components/Navbar';
+import BasketForm from '../components/BasketForm';
 
-function Basket() {
+
+const Basket = () => {
+
   return (
-    <div>
-        <Navbar />
-        <p>basket</p>
-    </div>
-  )
-}
+    <>
+    <BasketForm />
+    </>
+  );
+};
 
-export default Basket
+export default Basket;
