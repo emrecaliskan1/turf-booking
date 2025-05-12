@@ -1,0 +1,12 @@
+.ant-layout-footer {
+  color: #fff;
+  font-size: 14px;
+}
+
+.ant-menu-dark .ant-menu-item-selected {
+  background-color: #1a3622;
+}
+
+.ant-menu-dark .ant-menu-item:hover {
+  background-color: #20482b;
+}

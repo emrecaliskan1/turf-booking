@@ -7,6 +7,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import { getReservations } from '../services/reservations';
 import '../css/FieldReserv.css'
 import '../css/MainPage.css'
+import AppFooter from '../components/Footer';
 
 function MainPage() {
 
@@ -127,6 +128,7 @@ function MainPage() {
           )}
   </Modal>
 
+  <AppFooter/>
   <ToastContainer  autoClose={1000}/>
   
   </>

@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import Navbar from './Navbar';
 import '../css/Basket.css'
 import locale from 'antd/es/date-picker/locale/tr_TR';
+import AppFooter from './Footer';
 
 
 function BasketForm() {
@@ -163,6 +164,7 @@ function BasketForm() {
 
       </Card>
     </div>
+    <AppFooter/>
     <ToastContainer autoClose={1000}/>
     </>
   )
