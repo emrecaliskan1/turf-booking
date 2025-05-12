@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Button, Form, Input,Result } from 'antd';
+import { Card, Button, Form, Input,Result, DatePicker } from 'antd';
 import { addReservation } from '../services/reservations';
 import { toast, ToastContainer } from 'react-toastify';
 import dayjs from 'dayjs';
 import Navbar from './Navbar';
 import '../css/Basket.css'
+import locale from 'antd/es/date-picker/locale/tr_TR';
 
 
 function BasketForm() {
 
   const [basket, setBasket] = useState([]);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+
+  const monthFormat = 'MM/YY';
 
 
   //SEPET VERİLERİNİ YÜKLEME
@@ -135,7 +138,13 @@ function BasketForm() {
             name="expiryDate"
             rules={[{ required: true, validator: validateExpiryDate }]}
           >
-            <Input placeholder="MM/YY" maxLength={5} />
+             <DatePicker 
+                picker="month" 
+                format={monthFormat} 
+                locale={locale} 
+                placeholder="AA/YY" 
+                style={{ width: '100%' }}
+              />
           </Form.Item>
 
           <Form.Item
@@ -143,7 +152,7 @@ function BasketForm() {
             name="cvc"
             rules={[{ required: true, message: "CVC girin!", pattern: /^[0-9]{3}$/ }]}
           >
-            <Input placeholder="XXX" maxLength={3} />
+             <Input placeholder="XXX" maxLength={3} />
           </Form.Item>
 
           <Button type="primary" htmlType="submit" block style={{ backgroundColor: 'green', fontSize: '17px' }}>
