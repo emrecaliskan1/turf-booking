@@ -27,7 +27,6 @@ function MainPage() {
                     name: row.name,
                     price: row.price,
                 }));
-
                 setFields(parsedData);
             } catch (error) {
                 toast.error("Halı sahalar yüklenirken bir hata oluştu.", error);}
@@ -44,14 +43,16 @@ function MainPage() {
   const handleDateChange = async (date) => {
     setSelectedDate(date);
     try {
-      const allReservations = await Promise.all(fields.map(field => getReservations(field.name, date.format('YYYY-MM-DD'))));
-      const availableFields = fields.filter((field, index) => allReservations[index].length === 0);
-      if (availableFields.length === 0) {
-        toast.warning('Seçilen tarihte uygun saha bulunmamaktadır.');
-      }
+        const allReservations = await Promise.all(
+            fields.map(field => getReservations(field.name.trim(), date.format('YYYY-MM-DD')))
+        );
+        const availableFields = fields.filter((field, index) => allReservations[index].length === 0);
+        if (availableFields.length === 0) {
+            toast.warning('Seçilen tarihte uygun saha bulunmamaktadır.');
+        }
     } catch (error) {
-      toast.error('Rezervasyon verileri alınırken hata oluştu.');
-    }
+        toast.error('Rezervasyon verileri alınırken hata oluştu.');
+    } 
   };
 
   
@@ -104,7 +105,7 @@ function MainPage() {
           <Button
                   style={{ marginTop: '10px',marginLeft:'10px' }}
                   onClick={() => handleShowDetails(field)}>
-                  Detayı Gör
+                  Doluluk Saatlerini Gör
           </Button>
           
         </Card>
@@ -112,7 +113,7 @@ function MainPage() {
     </div>
 
   <Modal
-          title={`Dolu Saatler: ${selectedField?.name}`}
+          title={`Dolu Saatler:  ${selectedField?.name}`}
           visible={isModalVisible}
           onCancel={handleModalClose}
           footer={null}

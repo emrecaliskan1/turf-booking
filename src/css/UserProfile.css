@@ -9,5 +9,21 @@
 
 .user-reservations .ant-list-item:hover {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    transform: translateY(-5px); /* Hover efekti ile biraz yukarı kayar */
+    transform: translateY(-5px); 
+}
+
+.user-reservations {
+    background-image: url("/public/images/saha6.jpg");
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    /* align-items: center; */
+    justify-content: center;
+}
+
+.user-reservations-card{
+    margin: 20px;
+    width: 850px;
+    height: max-content
 }

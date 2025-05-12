@@ -37,7 +37,7 @@ function Profile() {
 
   return (
     <div className='user-reservations'>
-            <Card title='Rezervasyonlarım' style={{ margin: '20px' }}>
+            <Card title='Rezervasyonlarım' className="user-reservations-card" >
 
                 <List
                     itemLayout='horizontal'

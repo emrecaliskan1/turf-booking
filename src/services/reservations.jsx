@@ -24,7 +24,7 @@ export const getReservations = async (fieldName, date) => {
     // Seçilen saha ve tarihe ait rezervasyonları filtrele
     const filteredData = data.filter(
       (reservation) => 
-        reservation.fieldName === fieldName && reservation.date === date
+        reservation.fieldName.trim() === fieldName.trim() && reservation.date === date
     );
     return filteredData;
 

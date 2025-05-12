@@ -4,6 +4,7 @@ import { addReservation } from '../services/reservations';
 import { toast, ToastContainer } from 'react-toastify';
 import dayjs from 'dayjs';
 import Navbar from './Navbar';
+import '../css/Basket.css'
 
 
 function BasketForm() {
@@ -95,25 +96,27 @@ function BasketForm() {
     <>
     <Navbar  />
 
-     <div style={{ padding: '20px' }}>
+     <div style={{ padding: '20px' }} className='basket-wrapper'>
 
-      <Card title="Sepet" style={{ width: 650, margin: '0 auto' }}>
+      <Card title="Sepet" style={{ width: 650, margin: '0 auto' ,marginTop:'50px'}}>
          {basket.length === 0 ? (<p>Sepetiniz boş.</p>) : (basket.map((item, index) => (
-              <Card
+            <Card
                 key={index}
-                title={item.fieldName}
-                extra={
-                  <Button
-                    type="danger"
-                    size="small"
-                    onClick={() => handleRemoveFromBasket(index)}>
-                    Sil
-                  </Button>
-                }
-                style={{ marginBottom: '10px' }}>
-                <p>{item.date} | {item.startTime} - {item.endTime}</p>
-                <p>{item.totalPrice} TL</p>
-              </Card>
+                style={{ marginBottom: '10px', padding: '5px 10px' }}
+                bodyStyle={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px' }}
+              >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                <span style={{ fontWeight: 'bold' }}>{item.fieldName}</span>
+                <span>{item.date} | {item.startTime} - {item.endTime}</span>
+                <span>{item.totalPrice} TL</span>
+              </div>
+            <Button
+                type="danger"
+                size="small"
+                onClick={() => handleRemoveFromBasket(index)}>
+                Sil
+            </Button>
+            </Card>
             ))
           )}
 

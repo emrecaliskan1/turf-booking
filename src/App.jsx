@@ -11,8 +11,6 @@ import UserProfile from './pages/UserProfile';
 
 function App() {
 
-  const [currentUser, setCurrentUser] = useState(null);
-
   return (
     <div>
 

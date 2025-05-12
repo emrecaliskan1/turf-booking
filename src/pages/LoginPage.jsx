@@ -33,7 +33,7 @@ const LoginPage = () => {
     );
 
     if (!user) {
-      toast.error("Kullanıcı   bulunamadı.");
+      toast.error("Kullanıcı bulunamadı.");
       return;
     }
     if (user.password !== password) {

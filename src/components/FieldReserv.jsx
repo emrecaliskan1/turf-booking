@@ -48,7 +48,7 @@ function FieldReserv() {
       console.log('Seçilen tarih:', date.format('YYYY-MM-DD'));
 
       try {
-        const reservations = await getReservations(selectedField.name, date.format('YYYY-MM-DD'));
+        const reservations = await getReservations(selectedField.name.trim(), date.format('YYYY-MM-DD'));
 
         // Saatlerin rezervasyonlu olup olmadığını kontrol et
         const reservedTimes = reservations.map(res => ({
@@ -157,7 +157,7 @@ function FieldReserv() {
 
        
       </Card>
-      <ToastContainer autoClose={1500} />
+      <ToastContainer autoClose={700} />
     </div>
   )
 }

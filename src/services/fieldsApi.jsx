@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const URL ="https://v1.nocodeapi.com/emrecaliskan31/google_sheets/dXvKHjkDGOpRCUdY?tabId=fields"
+const URL ="https://v1.nocodeapi.com/emrecaliskan31/google_sheets/ZkJcAgofxuhCsJfB?tabId=fields"
 
 // Halı saha bilgilerini Sheets'e ekleme
 export const addField = async (fieldData) => {
