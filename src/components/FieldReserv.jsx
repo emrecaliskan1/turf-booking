@@ -1,14 +1,35 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Card, Form, Input, Select, DatePicker, TimePicker, Button } from 'antd';
-import { fields } from '../data/Fields';
 import { toast, ToastContainer } from 'react-toastify';
 import '../css/FieldReserv.css'
+import { getFields } from '../services/fieldsApi';
+import { getReservations } from '../services/reservations';
 
 function FieldReserv() {
 
+    const [fields, setFields] = useState([]);
     const [form] = Form.useForm();
-
+    const [availableHours, setAvailableHours] = useState([]);
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+    //HALISAHALARI SHEETS'TEN ÇEKEREK SELECT EKRANINDA GÖSTERME.
+     useEffect(() => {
+        const fetchFields = async () => {
+            try {
+                const data = await getFields();
+                const parsedData = data.map((row) => ({
+                    id: row.id,
+                    name: row.name,
+                    pricePerHour: parseInt(row.price, 10),
+                }));
+                setFields(parsedData);
+            } catch (error) {
+                toast.error("Halı sahalar yüklenirken bir hata oluştu.");
+            }
+        };
+        fetchFields();
+    }, []);
+
 
     //UNIQUE ID OLUŞTURMA
     const generateUniqueId = () => {
@@ -16,6 +37,35 @@ function FieldReserv() {
       window.crypto.getRandomValues(array);
       return array[0] % 1000000; 
     };
+
+
+    //REZERVASYON MÜSAİTLİK DURUMU KONTROLLERİ
+    const handleFieldChange = async (fieldId, date) => {
+      const selectedField = fields.find(field => field.id === fieldId);
+      if (!selectedField || !date) return;
+
+      console.log('Seçilen saha:', selectedField.name);
+      console.log('Seçilen tarih:', date.format('YYYY-MM-DD'));
+
+      try {
+        const reservations = await getReservations(selectedField.name, date.format('YYYY-MM-DD'));
+
+        // Saatlerin rezervasyonlu olup olmadığını kontrol et
+        const reservedTimes = reservations.map(res => ({
+          start: res.startTime,
+          end: res.endTime,
+        }));
+
+        console.log('Sıralı rezervasyon saatleri:', reservedTimes);
+        setAvailableHours(reservedTimes);
+
+      } catch (error) {
+        console.error('Rezervasyon verileri alınırken hata oluştu', error);
+        toast.error("Rezervasyon verileri alınırken hata oluştu");
+      }
+};
+
+  
 
     //REZERVASYONU SHEETS'E KAYDET & EKLENEN REZERVASYONU SEPETE KAYDET & SEPET BADGE'İNİ GÜNCELLE
     const handleSubmit = async (values) => {
@@ -49,9 +99,28 @@ function FieldReserv() {
         }
       };
 
+      //MÜSAİT OLMAYAN SAATLERİ DİSABLE OLARAK GÖSTERMEK İÇİN
+      const disabledTime = () => {
+        const reservedHours = availableHours.map(({ start, end }) => ({
+            start: parseInt(start.split(':')[0], 10),
+            end: parseInt(end.split(':')[0], 10),
+        }));
+
+        const disabledHours = [];
+        for (let i = 0; i < 24; i++) {
+            if (reservedHours.some(({ start, end }) => i >= start && i < end)) {
+                disabledHours.push(i);
+            }
+        }
+        return {
+            disabledHours: () => disabledHours,
+        };
+    };
+
 
   return (
     <div className="reservation-wrapper">
+      
       <Card className="reservation-card" title="Rezervasyon Yap" variant={false}>
 
         <Form layout="vertical" onFinish={handleSubmit} form={form}>
@@ -60,18 +129,21 @@ function FieldReserv() {
             <Select
               options={fields.map(field => ({ label: field.name, value: field.id }))}
               placeholder="Bir saha seçin"
+               onChange={(fieldId) => form.setFieldsValue({ date: null, timeRange: null })}
             />
           </Form.Item>
 
           <Form.Item name="date" label="Tarih" rules={[{ required: true }]}>
-            <DatePicker placeholder='Tarih Seçin'  style={{ width: '100%' }} />
+            <DatePicker 
+             onChange={(date) => handleFieldChange(form.getFieldValue('fieldId'), date)}
+            placeholder='Tarih Seçin'  style={{ width: '100%' }} />
           </Form.Item>
 
           <Form.Item name="timeRange" label="Saat Aralığı" rules={[{ required: true }]}>
             <TimePicker.RangePicker 
             format="HH:mm"
             minuteStep={60} 
-            showMinute={false}
+            {...disabledTime()}
             style={{ width: '100%' }} />
           </Form.Item>
 

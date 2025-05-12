@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Form, Input, Button, message } from "antd";
 import { registerUser, getAllUsers } from "../services/auth"; // API fonksiyonlarını buradan alıyoruz
-import img from '/images/saha2.jpg'
 import { toast, ToastContainer } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
+import img from '/images/saha2.jpg'
 
 const RegisterPage = () => {
 
