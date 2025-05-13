@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import { getFields } from '../services/fieldsApi';
 import { useNavigate } from 'react-router-dom';
-import { Button, Card, DatePicker, Modal } from 'antd';
+import { Button, Card, DatePicker, Input, Modal } from 'antd';
 import { toast, ToastContainer } from 'react-toastify';
 import { getReservations } from '../services/reservations';
 import '../css/FieldReserv.css'
@@ -16,6 +16,8 @@ function MainPage() {
    const [selectedField, setSelectedField] = useState(null);
    const [reservedTimes, setReservedTimes] = useState([]);
    const [isModalVisible, setIsModalVisible] = useState(false);
+   const [searchTerm, setSearchTerm] = useState('');
+   const [filteredFields, setFilteredFields] = useState([]);
    const navigate = useNavigate();
 
    //HALI SAHALARI DB'DEN ÇEK
@@ -29,11 +31,23 @@ function MainPage() {
                     price: row.price,
                 }));
                 setFields(parsedData);
+                setFilteredFields(parsedData)
             } catch (error) {
                 toast.error("Halı sahalar yüklenirken bir hata oluştu.", error);}
         };
         fetchFields();
     }, []);
+
+
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    const filtered = fields.filter((field) =>
+      field.name.toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredFields(filtered);
+};
+
 
   //REZERVASYON YAP TUŞUNA TIKLANDIĞINDA SAYFAYA YÖNLENDİR.
   const handleReservation = () => {
@@ -57,7 +71,7 @@ function MainPage() {
   };
 
   
-  //DETAYI GÖR TUŞU
+  //DOLULUK ORANINI GÖR TUŞU
   const handleShowDetails = async (field) => {
     try {
       const reservations = await getReservations(field.name, selectedDate.format('YYYY-MM-DD'));
@@ -79,21 +93,26 @@ function MainPage() {
     <>
       <Navbar/>
 
-      <div style={{ display: 'flex', justifyContent: 'center', margin: '20px' }}>
-          <DatePicker onChange={handleDateChange} placeholder='Tarih Seçin' style={{ width: '300px',height:'35px' }} />
+      <div style={{ display: 'flex', justifyContent: 'center', margin: '20px',marginRight:'70px' ,gap:'50px'}}>
+         <Input
+          placeholder="Halısaha Ara"
+          value={searchTerm}
+          onChange={handleSearch}
+          style={{ width: '385px', height: '35px' }}
+        />
+          <DatePicker onChange={handleDateChange} placeholder='Tarih Seçin' style={{ width: '300px',height:'35px',marginRight:'35px' }} />
       </div>
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center', padding: '20px' }}>
 
-      {fields.map((field) => (
+      {filteredFields.map((field) => (
 
         <Card
           key={field.id}
           title={field.name}
           style={{ width: 300, margin: '10px', textAlign: 'center', borderRadius: '10px' }}
-          hoverable
-        >
-          <p style={{ fontSize: '15px' }}>{field.price} TL / Saat</p>
+          hoverable>
+            <p style={{ fontSize: '15px' }}>{field.price} TL / Saat</p>
 
           <Button 
             className='custom-button'
@@ -113,20 +132,15 @@ function MainPage() {
       ))}
     </div>
 
-  <Modal
-          title={`Dolu Saatler:  ${selectedField?.name}`}
-          visible={isModalVisible}
-          onCancel={handleModalClose}
-          footer={null}
-        >
-          {reservedTimes.length > 0 ? (
-            reservedTimes.map((time, index) => (
-              <p key={index}>{time}</p>
-            ))
-          ) : (
-            <p>Bu tarihte dolu saat bulunmamaktadır.</p>
-          )}
-  </Modal>
+    <Modal
+      title={`Dolu Saatler:  ${selectedField?.name}`}
+      visible={isModalVisible}
+      onCancel={handleModalClose}
+      footer={null}>
+        {reservedTimes.length > 0 ? (reservedTimes.map((time, index) => (
+          <p key={index}>{time}</p>)))
+          : (<p>Bu tarihte dolu saat bulunmamaktadır.</p>)}
+    </Modal>
 
   <AppFooter/>
   <ToastContainer  autoClose={1000}/>
