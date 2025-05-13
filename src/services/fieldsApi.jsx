@@ -22,7 +22,7 @@ export const addField = async (fieldData) => {
     });
     return response.data;
     } catch (error) {
-        throw new Error(`Halı saha eklenemedi`);
+        console.log(error)
     }
 };
 

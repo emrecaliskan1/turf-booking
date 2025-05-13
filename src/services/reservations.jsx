@@ -21,7 +21,6 @@ export const getReservations = async (fieldName, date) => {
   try {
     const response = await axios.get(URL);
     const data = response.data;
-
     const filteredData = data.filter(
       (reservation) => 
         reservation.fieldName.trim() === fieldName.trim() && reservation.date === date

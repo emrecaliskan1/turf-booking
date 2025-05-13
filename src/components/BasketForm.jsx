@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Card, Button, Form, Input,Result, DatePicker } from 'antd';
 import { addReservation } from '../services/reservations';
 import { toast, ToastContainer } from 'react-toastify';
+import { getBasketByUser,removeFromBasket,deleteBasket } from '../services/basketApi';
 import dayjs from 'dayjs';
 import Navbar from './Navbar';
 import '../css/Basket.css'
@@ -13,15 +14,23 @@ function BasketForm() {
 
   const [basket, setBasket] = useState([]);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
-
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   const monthFormat = 'MM/YY';
-
 
   //SEPET VERİLERİNİ YÜKLEME
   useEffect(() => {
-    const storedBasket = JSON.parse(localStorage.getItem("basket")) || [];
-    setBasket(storedBasket);
-  }, []);
+     const fetchBasket = async () => {
+      try {
+        const data = await getBasketByUser(currentUser?.id);
+        setBasket(data); 
+      } catch (error) {
+        toast.error("Sepet verileri alınırken hata oluştu.", error);
+      }
+    };
+    if (currentUser?.id) {
+      fetchBasket();
+    }
+  },[currentUser?.id]);
 
 
  //ÖDEME İŞLEMİ && SHEETS'E KAYDETME
@@ -34,35 +43,33 @@ function BasketForm() {
 
         const formattedReservation = {
           ...reservation,
+          username: currentUser?.username,
           date: formattedDate,
           startTime: formattedStartTime,
           endTime: formattedEndTime,
         };
-
+        //REZERVASYONLAR TABLOSUNA EKLEME
         await addReservation(formattedReservation);
       }
-      localStorage.removeItem("basket");
-      localStorage.setItem("basketCount", 0);
-      setBasket([]);
-      setPaymentSuccess(true);
-    } catch (error) {
-      toast.error("Ödeme başarısız");
-    }
+        //SEPET TABLOSUNDAN SİLME
+        await deleteBasket(currentUser.id); 
+        setBasket([]);
+        setPaymentSuccess(true); 
+        } catch (error) {
+          toast.error("Ödeme başarısız");
+      }
   };
 
+
   //SEPETTEN REZERVASYON SİLME İŞLEVİ
-  const handleRemoveFromBasket = (index) => {
-    const updatedBasket = [...basket];
-    updatedBasket.splice(index, 1); 
-    setBasket(updatedBasket);
-    localStorage.setItem("basket", JSON.stringify(updatedBasket)); 
-    const newBasketCount = updatedBasket.length;
-    localStorage.setItem("basketCount", newBasketCount);
-    // Navbar'daki basket count'u güncelle
-    if (window.updateBasketCount) {
-      window.updateBasketCount();
+  const handleRemoveFromBasket = async (reservationId) => {
+    try {
+      await removeFromBasket(reservationId);
+      setBasket((prevBasket) => prevBasket.filter((item) => item.id !== reservationId)); 
+      toast.info('Rezervasyon sepetten silindi.');
+    } catch (error) {
+      toast.error('Rezervasyon silinemedi.');
     }
-    toast.info('Rezervasyon sepetten silindi.'); 
   };
 
 
@@ -96,8 +103,7 @@ function BasketForm() {
         extra={[
           <Button type="primary" key="main" href="/main" style={{ backgroundColor: 'green', fontSize: '17px' }} >
             Ana Sayfaya Dön
-          </Button>
-        ]}
+          </Button>]}
       />
       </>
     )}
@@ -124,7 +130,7 @@ function BasketForm() {
               <Button
                   type="danger"
                   size="small"
-                  onClick={() => handleRemoveFromBasket(index)}>
+                  onClick={() => handleRemoveFromBasket(item.id)}>
                   Sil
               </Button>
 

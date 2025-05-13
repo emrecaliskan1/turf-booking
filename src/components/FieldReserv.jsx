@@ -3,6 +3,7 @@ import { Card, Form, Input, Select, DatePicker, TimePicker, Button } from 'antd'
 import { toast, ToastContainer } from 'react-toastify';
 import { getFields } from '../services/fieldsApi';
 import { getReservations } from '../services/reservations';
+import { addToBasket } from '../services/basketApi';
 import '../css/FieldReserv.css'
 
 function FieldReserv() {
@@ -31,7 +32,6 @@ function FieldReserv() {
   }, []);
 
   
-
   //UNIQUE ID OLUŞTURMA
   const generateUniqueId = () => {
     const array = new Uint32Array(1);
@@ -62,7 +62,7 @@ function FieldReserv() {
 
   
 
-  //REZERVASYONU SHEETS'E KAYDET & EKLENEN REZERVASYONU SEPETE KAYDET & SEPET BADGE'İNİ GÜNCELLE
+  //REZERVASYONU SEPETE KAYDET & ÇAKIŞAN SAAT ARALIKLARINA UYARI VER
   const handleSubmit = async (values) => {
     const { fieldId, date, timeRange } = values;
     const field = fields.find(field => field.id === fieldId);
@@ -71,9 +71,9 @@ function FieldReserv() {
     const hours = timeRange[1].hour() - timeRange[0].hour();
     const total = hours * field.pricePerHour;
 
-    const newReservation = {
+    const newBasket = {
       id: generateUniqueId(),
-      username: currentUser?.username,
+      userId: currentUser?.id,
       fieldName: field.name,
       date: date.format('YYYY-MM-DD'),
       startTime: startTime,
@@ -81,7 +81,7 @@ function FieldReserv() {
       totalPrice: total,
     };
 
-    // Çakışan saatleri kontrol et
+    //ÇAKIŞAN SAATLERİ KONTROL ET
     const isTimeConflicted = availableHours.some(({ start, end }) => {
       return (
         (startTime >= start && startTime < end) ||
@@ -96,14 +96,9 @@ function FieldReserv() {
     }
 
     try {
-      const basket = JSON.parse(localStorage.getItem("basket")) || [];
-      basket.push(newReservation);
-      localStorage.setItem("basket", JSON.stringify(basket));
-      const newCount = basket.length;
-      localStorage.setItem("basketCount", newCount);
-      window.updateBasketCount();
-      toast.success("Rezervasyon sepete eklendi");
+      await addToBasket(newBasket);
       form.resetFields();
+      toast.success("Rezervasyon sepete eklendi");
     } catch (error) {
       toast.error("Rezervasyon kaydedilemedi");
     }
@@ -115,20 +110,16 @@ function FieldReserv() {
     start: parseInt(start.split(':')[0], 10),
     end: parseInt(end.split(':')[0], 10),  
     }));
-
     const disabledHours = [];
-
     // Saat aralıklarının çakışıp çakışmadığını kontrol et
     for (let i = 0; i < 24; i++) {
       const isTimeDisabled = reservedHours.some(({ start, end }) => {
       return (i >= start && i < end);
     });
-
     if (isTimeDisabled) {
       disabledHours.push(i); 
     }
     }
-
     return {
       disabledHours: () => disabledHours,
       disabledMinutes: (hour) => {
