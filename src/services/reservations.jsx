@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const URL = "https://sheetdb.io/api/v1/c3unhcp2d09tn?sheet=reservations"
+const URL = "https://sheetdb.io/api/v1/bhjvz1z32i565?sheet=reservations"
 
 //REZERVASYON EKLE
 export const addReservation = async (reservationData) => {
@@ -50,7 +50,7 @@ export const getUserReservations = async (username) => {
 //REZERVASYON SİL
 export const deleteReservation = async (reservationId) => {
   try {
-    const response = await axios.delete(`https://sheetdb.io/api/v1/c3unhcp2d09tn/id/${reservationId}?sheet=reservations`);
+    const response = await axios.delete(`https://sheetdb.io/api/v1/bhjvz1z32i565/id/${reservationId}?sheet=reservations`);
     return response.data;
   } catch (error) {
     console.error('Rezervasyon silinirken hata oluştu:', error);

@@ -50,7 +50,7 @@ function BasketForm() {
     }
   };
 
-  // REZERVASYON SİLME İŞLEVİ
+  //SEPETTEN REZERVASYON SİLME İŞLEVİ
   const handleRemoveFromBasket = (index) => {
     const updatedBasket = [...basket];
     updatedBasket.splice(index, 1); 
@@ -114,20 +114,19 @@ function BasketForm() {
             <Card
                 key={index}
                 style={{ marginBottom: '10px', padding: '5px 10px' }}
-                bodyStyle={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px' }}
-              >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                <span style={{ fontWeight: 'bold' }}>{item.fieldName}</span>
-                <span>{item.date} | {item.startTime} - {item.endTime}</span>
-                <span>{item.totalPrice} TL</span>
-              </div>
+                bodyStyle={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                  <span style={{ fontWeight: 'bold' }}>{item.fieldName}</span>
+                  <span>{item.date} | {item.startTime} - {item.endTime}</span>
+                  <span>{item.totalPrice} TL</span>
+                </div>
 
-            <Button
-                type="danger"
-                size="small"
-                onClick={() => handleRemoveFromBasket(index)}>
-                Sil
-            </Button>
+              <Button
+                  type="danger"
+                  size="small"
+                  onClick={() => handleRemoveFromBasket(index)}>
+                  Sil
+              </Button>
 
             </Card>
             ))
@@ -138,31 +137,27 @@ function BasketForm() {
           <Form.Item
             label="Kart Numarası"
             name="cardNumber"
-            rules={[{ required: true, validator: validateCardNumber }]}
-          >
+            rules={[{ required: true, validator: validateCardNumber }]}>
             <Input  placeholder="XXXX XXXX XXXX XXXX" maxLength={16}/>
           </Form.Item>
 
           <Form.Item
             label="Kartınızın Son Kullanma Tarihi"
             name="expiryDate"
-            rules={[{ required: true, validator: validateExpiryDate }]}
-          >
-             <DatePicker 
-                picker="month" 
-                format={monthFormat} 
-                locale={locale} 
-                placeholder="AA/YY" 
-                style={{ width: '100%' }}
-              />
+            rules={[{ required: true, validator: validateExpiryDate }]}>
+            <DatePicker 
+              picker="month" 
+              format={monthFormat} 
+              locale={locale} 
+              placeholder="AA/YY" 
+              style={{ width: '100%' }}/>
           </Form.Item>
 
           <Form.Item
             label="CVC"
             name="cvc"
-            rules={[{ required: true, message: "CVC girin!", pattern: /^[0-9]{3}$/ }]}
-          >
-             <Input placeholder="XXX" maxLength={3} />
+            rules={[{ required: true, message: "CVC girin!", pattern: /^[0-9]{3}$/ }]}>
+            <Input placeholder="XXX" maxLength={3} />
           </Form.Item>
 
           <Button type="primary" htmlType="submit" block style={{ backgroundColor: 'green', fontSize: '17px' }}>

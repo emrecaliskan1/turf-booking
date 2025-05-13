@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const URL = "https://sheetdb.io/api/v1/c3unhcp2d09tn"
+const URL = "https://sheetdb.io/api/v1/bhjvz1z32i565"
 
 export const getAllUsers = () => axios.get(URL);
 

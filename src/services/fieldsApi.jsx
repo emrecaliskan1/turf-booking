@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const URL ="https://sheetdb.io/api/v1/c3unhcp2d09tn?sheet=fields"
+const URL ="https://sheetdb.io/api/v1/bhjvz1z32i565?sheet=fields"
 
 // Halı saha bilgilerini Sheets'e ekleme
 export const addField = async (fieldData) => {

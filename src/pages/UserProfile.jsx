@@ -6,7 +6,6 @@ import AppFooter from '../components/Footer';
 
 function UserProfile() {
 
-
   return (
     <>
     <Navbar/>

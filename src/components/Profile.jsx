@@ -41,18 +41,6 @@ function Profile() {
     };    
 
 
-     // MODALİ AÇMA
-    const showModal = () => {
-        setIsModalVisible(true);
-    };
-
-    // MODALİ KAPATMA
-    const handleCancel = () => {
-        setIsModalVisible(false);
-        setFieldName('');
-        setFieldPrice('');
-    };
-
     // HALI SAHA EKLEME
     const handleAddField = async () => {
         if (!fieldName || !fieldPrice) {
@@ -67,6 +55,18 @@ function Profile() {
         }
     };
 
+    
+     // MODALİ AÇMA
+    const showModal = () => {
+        setIsModalVisible(true);
+    };
+
+    // MODALİ KAPATMA
+    const handleCancel = () => {
+        setIsModalVisible(false);
+        setFieldName('');
+        setFieldPrice('');
+    };
 
   return (
     <div className='user-reservations'>
@@ -93,7 +93,7 @@ function Profile() {
 
               <Modal
                 title="Halı Saha Ekle"
-                visible={isModalVisible}
+                open={isModalVisible}
                 onCancel={handleCancel}
                 onOk={handleAddField}
                 okText="Ekle"

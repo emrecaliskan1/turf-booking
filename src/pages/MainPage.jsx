@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
+import AppFooter from '../components/Footer';
 import { getFields } from '../services/fieldsApi';
 import { useNavigate } from 'react-router-dom';
 import { Button, Card, DatePicker, Input, Modal } from 'antd';
-import { CloseOutlined } from '@ant-design/icons';
 import { toast, ToastContainer } from 'react-toastify';
 import { getReservations } from '../services/reservations';
 import '../css/FieldReserv.css'
 import '../css/MainPage.css'
-import AppFooter from '../components/Footer';
+
 
 function MainPage() {
 
@@ -134,11 +134,10 @@ function MainPage() {
 
     <Modal
       title={`Dolu Saatler:  ${selectedField?.name}`}
-      visible={isModalVisible}
+      open={isModalVisible}
       onCancel={handleModalClose}
       footer={null}>
-        {reservedTimes.length > 0 ? (reservedTimes.map((time, index) => (
-          <p key={index}>{time}</p>)))
+        {reservedTimes.length > 0 ? (reservedTimes.map((time, index) => (<p key={index}>{time}</p>)))
           : (<p>Bu tarihte dolu saat bulunmamaktadır.</p>)}
     </Modal>
 

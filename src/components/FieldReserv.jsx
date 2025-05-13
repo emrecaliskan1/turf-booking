@@ -30,6 +30,7 @@ function FieldReserv() {
     fetchFields();
   }, []);
 
+  
 
   //UNIQUE ID OLUŞTURMA
   const generateUniqueId = () => {
@@ -65,30 +66,45 @@ function FieldReserv() {
   const handleSubmit = async (values) => {
     const { fieldId, date, timeRange } = values;
     const field = fields.find(field => field.id === fieldId);
+    const startTime = timeRange[0].format('HH:mm');
+    const endTime = timeRange[1].format('HH:mm');
     const hours = timeRange[1].hour() - timeRange[0].hour();
     const total = hours * field.pricePerHour;
-    
+
     const newReservation = {
       id: generateUniqueId(),
-      username:  currentUser?.username,
+      username: currentUser?.username,
       fieldName: field.name,
       date: date.format('YYYY-MM-DD'),
-      startTime: timeRange[0].format('HH:mm'),
-      endTime: timeRange[1].format('HH:mm'),
+      startTime: startTime,
+      endTime: endTime,
       totalPrice: total,
     };
-    
+
+    // Çakışan saatleri kontrol et
+    const isTimeConflicted = availableHours.some(({ start, end }) => {
+      return (
+        (startTime >= start && startTime < end) ||
+        (endTime > start && endTime <= end) ||
+        (startTime <= start && endTime >= end)
+      );
+    });
+
+    if (isTimeConflicted) {
+      toast.error("Seçilen saat dilimi başka bir rezervasyonla çakışıyor.");
+      return; 
+    }
+
     try {
       const basket = JSON.parse(localStorage.getItem("basket")) || [];
       basket.push(newReservation);
       localStorage.setItem("basket", JSON.stringify(basket));
-          
       const newCount = basket.length;
       localStorage.setItem("basketCount", newCount);
       window.updateBasketCount();
       toast.success("Rezervasyon sepete eklendi");
       form.resetFields();
-    } catch(error) {
+    } catch (error) {
       toast.error("Rezervasyon kaydedilemedi");
     }
 };
@@ -96,19 +112,32 @@ function FieldReserv() {
   //MÜSAİT OLMAYAN SAATLERİ DİSABLE OLARAK GÖSTERMEK İÇİN
   const disabledTime = () => {
     const reservedHours = availableHours.map(({ start, end }) => ({
-      start: parseInt(start.split(':')[0], 10),
-      end: parseInt(end.split(':')[0], 10),
+    start: parseInt(start.split(':')[0], 10),
+    end: parseInt(end.split(':')[0], 10),  
     }));
 
     const disabledHours = [];
-      for (let i = 0; i < 24; i++) {
-        if (reservedHours.some(({ start, end }) => i >= start && i < end)) {
-          disabledHours.push(i);
-        }
+
+    // Saat aralıklarının çakışıp çakışmadığını kontrol et
+    for (let i = 0; i < 24; i++) {
+      const isTimeDisabled = reservedHours.some(({ start, end }) => {
+      return (i >= start && i < end);
+    });
+
+    if (isTimeDisabled) {
+      disabledHours.push(i); 
     }
+    }
+
     return {
       disabledHours: () => disabledHours,
-    };
+      disabledMinutes: (hour) => {
+      if (disabledHours.includes(hour)) {
+        return Array.from({ length: 60 }, (_, index) => index);
+      }
+      return [];
+    }
+  };
   };
 
 
@@ -123,7 +152,7 @@ function FieldReserv() {
             <Select
               options={fields.map(field => ({ label: field.name, value: field.id }))}
               placeholder="Bir saha seçin"
-               onChange={(fieldId) => form.setFieldsValue({ date: null, timeRange: null })}
+              onChange={() => form.setFieldsValue({ date: null, timeRange: null })}
             />
           </Form.Item>
 
