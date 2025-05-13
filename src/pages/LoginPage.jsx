@@ -16,32 +16,27 @@ const LoginPage = () => {
         const response = await getAllUsers();
         setUsers(response.data);
       } catch (error) {
-        toast.error("Kullanıcılar yüklenirken bir hata oluştu!");
+        console.log(error)
       }
     };
     fetchUsers();
   }, []);
 
 
-
+  //GİRİŞ YAPMA İŞLEMİ & DB'DEKİ USERSLARI KONTROL ETME
   const onFinish = async (values) => {
     const { username, email, password } = values;
 
-    // Kullanıcı adı veya e-posta ile eşleşen kullanıcıyı bulma
     const user = users.find(
       (user) => user.username === username || user.email === email
     );
-
     if (!user) {
       toast.error("Kullanıcı bulunamadı.");
-      return;
-    }
+      return;}
     if (user.password !== password) {
       toast.error("Kullanıcı adınız ya da şifreyiz yanlış !");
-      return;
-    }
+      return;}
     localStorage.setItem("currentUser", JSON.stringify(user));
-    toast.success("Giriş başarılı!");
     navigate("/main"); 
   };
 

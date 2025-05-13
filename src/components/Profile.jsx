@@ -14,6 +14,7 @@ function Profile() {
     const [fieldName, setFieldName] = useState('');
     const [fieldPrice, setFieldPrice] = useState('');
 
+
     //GİRİŞ YAPILAN KULLANICININ REZERVASAYONLARINI GÖRÜNTÜLEMEK İÇİN USEEFFECT
     useEffect(() => {
         const fetchUserReservations = async () => {
@@ -26,6 +27,7 @@ function Profile() {
         };
         fetchUserReservations();
     }, []);
+
 
     //REZERVASYON SİLME
     const handleDelete = async (reservationId) => { 
@@ -55,15 +57,12 @@ function Profile() {
     const handleAddField = async () => {
         if (!fieldName || !fieldPrice) {
             toast.error("Lütfen tüm alanları doldurun.");
-            return;
-        }
-
+            return;}
         try {
-            await addField({id:Math.floor(Math.random()*100), fieldName, price: fieldPrice });
+            await addField({id:Math.floor(100 + Math.random()*90), name:fieldName, price: fieldPrice });
             toast.success("Halı saha başarıyla eklendi.");
-            handleCancel(); // Modal'ı kapat
+            handleCancel();
         } catch (error) {
-            console.log(error)
             toast.error("Halı saha eklenirken bir hata oluştu.");
         }
     };
@@ -89,6 +88,7 @@ function Profile() {
                  <Button type="default" onClick={showModal} style={{ marginTop: '40px' ,marginLeft:'700px'}}>
                     Halı Saha Ekle
                 </Button>
+
             </Card>
 
               <Modal
@@ -100,6 +100,7 @@ function Profile() {
                 cancelText="İptal"
             >
                 <Form layout="vertical">
+
                     <Form.Item label="Halı Saha Adı">
                         <Input 
                             placeholder="Halı Saha Adı"
@@ -107,6 +108,7 @@ function Profile() {
                             onChange={(e) => setFieldName(e.target.value)}
                         />
                     </Form.Item>
+
                     <Form.Item label="Saatlik Ücret (TL)">
                         <Input 
                             placeholder="Fiyat"
@@ -115,7 +117,9 @@ function Profile() {
                             type="number"
                         />
                     </Form.Item>
+
                 </Form>
+
             </Modal>
 
          <ToastContainer  autoClose={500}/>               

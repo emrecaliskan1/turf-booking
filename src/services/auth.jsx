@@ -1,11 +1,8 @@
 import axios from "axios";
-import { v4 as uuidv4 } from "uuid";
 
-const URL = "https://sheetdb.io/api/v1/m7stvofvne91b"
-
+const URL = "https://sheetdb.io/api/v1/c3unhcp2d09tn"
 
 export const getAllUsers = () => axios.get(URL);
-
 
 //KULLANICI KAYIT ET
 export const registerUser = (userData) => {

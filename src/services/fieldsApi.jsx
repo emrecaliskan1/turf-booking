@@ -1,23 +1,39 @@
 import axios from 'axios';
 
-const URL ="https://v1.nocodeapi.com/emrecaliskan31/google_sheets/ZkJcAgofxuhCsJfB?tabId=fields"
+const URL ="https://sheetdb.io/api/v1/c3unhcp2d09tn?sheet=fields"
 
 // Halı saha bilgilerini Sheets'e ekleme
 export const addField = async (fieldData) => {
   try {
-    await axios.post(URL, fieldData);
-  } catch (error) {
-    console.error("Halı saha eklenemedi:", error);
-  }
+    const formattedData = {
+      data: [
+        {
+          id: fieldData.id,
+          name: fieldData.name,
+          price: fieldData.price
+        }
+      ]
+    };
+        
+    const response = await axios.post(URL, formattedData, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.data;
+    } catch (error) {
+        throw new Error(`Halı saha eklenemedi`);
+    }
 };
+
 
 // Halı saha bilgilerini Sheets'ten çekme
 export const getFields = async () => {
   try {
     const response = await axios.get(URL);
-    return response.data.data;
+    return response.data;
   } catch (error) {
-    console.error("Halı saha verileri alınamadı:", error);
+    console.error("Halı saha verileri alınamadı:",error);
     return [];
   }
 };

@@ -35,17 +35,15 @@ const RegisterPage = () => {
   };
 
 
+  //Kullanıcı Adı ve E-Posta KONTROLÜ & YENİ KULLANICIYI KAYDETME İŞLEMİ
   const onFinish = async (values) => {
-    // Kullanıcı adı ve e-posta kontrolü
     const validationError = checkIfUserExists(values.username, values.email);
     if (validationError) {
       toast.error(validationError);
       return;
     }
     try {
-      // Yeni kullanıcıyı kaydetme
       await registerUser(values);
-      toast.success("Kullanıcı başarıyla oluşturuldu!");
       navigate("/login")
     } catch (error) {
       toast.error("Kullanıcı oluşturulurken bir hata oluştu.");

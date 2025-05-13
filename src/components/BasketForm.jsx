@@ -56,7 +56,13 @@ function BasketForm() {
     updatedBasket.splice(index, 1); 
     setBasket(updatedBasket);
     localStorage.setItem("basket", JSON.stringify(updatedBasket)); 
-    toast.success('Rezervasyon sepetten silindi.'); 
+    const newBasketCount = updatedBasket.length;
+    localStorage.setItem("basketCount", newBasketCount);
+    // Navbar'daki basket count'u güncelle
+    if (window.updateBasketCount) {
+      window.updateBasketCount();
+    }
+    toast.info('Rezervasyon sepetten silindi.'); 
   };
 
 
@@ -104,6 +110,7 @@ function BasketForm() {
 
       <Card title="Sepet" style={{ width: 650, margin: '0 auto' ,marginTop:'50px'}}>
          {basket.length === 0 ? (<p>Sepetiniz boş.</p>) : (basket.map((item, index) => (
+
             <Card
                 key={index}
                 style={{ marginBottom: '10px', padding: '5px 10px' }}
@@ -114,12 +121,14 @@ function BasketForm() {
                 <span>{item.date} | {item.startTime} - {item.endTime}</span>
                 <span>{item.totalPrice} TL</span>
               </div>
+
             <Button
                 type="danger"
                 size="small"
                 onClick={() => handleRemoveFromBasket(index)}>
                 Sil
             </Button>
+
             </Card>
             ))
           )}
@@ -164,6 +173,7 @@ function BasketForm() {
 
       </Card>
     </div>
+    
     <AppFooter/>
     <ToastContainer autoClose={1000}/>
     </>

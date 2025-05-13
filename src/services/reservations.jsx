@@ -1,60 +1,56 @@
 import axios from 'axios'
 
-const URL = "https://sheetdb.io/api/v1/m7stvofvne91b?sheet=reservations"
+const URL = "https://sheetdb.io/api/v1/c3unhcp2d09tn?sheet=reservations"
 
 //REZERVASYON EKLE
 export const addReservation = async (reservationData) => {
-    const response = await fetch(`${URL}`, {
-      method: 'POST',
+  try {
+    const response = await axios.post(URL, { data: [reservationData] }, {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ data: [reservationData] }),
-    });  
-    return await response.json();
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error)
+  }
   };
 
-
-
+//REZERVASYONLARI ÇEK
 export const getReservations = async (fieldName, date) => {
   try {
-    const response = await fetch(URL);
-    const data = await response.json();
+    const response = await axios.get(URL);
+    const data = response.data;
 
-    // Seçilen saha ve tarihe ait rezervasyonları filtrele
     const filteredData = data.filter(
       (reservation) => 
         reservation.fieldName.trim() === fieldName.trim() && reservation.date === date
     );
     return filteredData;
-
   } catch (error) {
     console.error('Hata:', error);
   }
 };
 
-
 //GİRİŞ YAPAN KULLANICININ REZERVASYONLARINI DÖNDÜR
 export const getUserReservations = async (username) => {
   try {
-    const response = await fetch(URL);
-    const data = await response.json();
+    const response = await axios.get(URL);
+    const data = response.data;
 
     const filteredData = data.filter(
       (reservation) => reservation.username === username
     );
     return filteredData;
-
   } catch (error) {
     console.error('Rezervasyon verileri alınırken hata oluştu:', error);
   }
 };
 
-
 //REZERVASYON SİL
 export const deleteReservation = async (reservationId) => {
   try {
-    const response = await axios.delete(`https://sheetdb.io/api/v1/m7stvofvne91b/id/${reservationId}?sheet=reservations`);
+    const response = await axios.delete(`https://sheetdb.io/api/v1/c3unhcp2d09tn/id/${reservationId}?sheet=reservations`);
     return response.data;
   } catch (error) {
     console.error('Rezervasyon silinirken hata oluştu:', error);

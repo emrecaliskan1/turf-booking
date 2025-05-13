@@ -18,7 +18,7 @@ const Navbar = () => {
    useEffect(() => {
     const storedCount = JSON.parse(localStorage.getItem("basketCount")) || 0;
     setBasketCount(storedCount);
-     const user = JSON.parse(localStorage.getItem("currentUser"));
+    const user = JSON.parse(localStorage.getItem("currentUser"));
     if (user) {
       setCurrentUser(user.username);
     }
@@ -31,7 +31,6 @@ const Navbar = () => {
     setBasketCount(storedCount);
   };
 
-  // Sepet sayısını güncelleme işlemini dinle
   useEffect(() => {
     window.updateBasketCount = updateBasketCount;
   }, []);

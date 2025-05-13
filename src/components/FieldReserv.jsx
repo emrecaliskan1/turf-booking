@@ -31,7 +31,7 @@ function FieldReserv() {
   }, []);
 
 
-    //UNIQUE ID OLUŞTURMA
+  //UNIQUE ID OLUŞTURMA
   const generateUniqueId = () => {
     const array = new Uint32Array(1);
     window.crypto.getRandomValues(array);
@@ -39,7 +39,7 @@ function FieldReserv() {
   };
 
 
-    //REZERVASYON MÜSAİTLİK DURUMU KONTROLLERİ
+  //REZERVASYON MÜSAİTLİK DURUMU KONTROLLERİ
   const handleFieldChange = async (fieldId, date) => {
     const selectedField = fields.find(field => field.id === fieldId);
     if (!selectedField || !date) return;
@@ -61,7 +61,7 @@ function FieldReserv() {
 
   
 
-    //REZERVASYONU SHEETS'E KAYDET & EKLENEN REZERVASYONU SEPETE KAYDET & SEPET BADGE'İNİ GÜNCELLE
+  //REZERVASYONU SHEETS'E KAYDET & EKLENEN REZERVASYONU SEPETE KAYDET & SEPET BADGE'İNİ GÜNCELLE
   const handleSubmit = async (values) => {
     const { fieldId, date, timeRange } = values;
     const field = fields.find(field => field.id === fieldId);

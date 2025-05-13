@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar'
 import { getFields } from '../services/fieldsApi';
 import { useNavigate } from 'react-router-dom';
 import { Button, Card, DatePicker, Input, Modal } from 'antd';
+import { CloseOutlined } from '@ant-design/icons';
 import { toast, ToastContainer } from 'react-toastify';
 import { getReservations } from '../services/reservations';
 import '../css/FieldReserv.css'
@@ -39,19 +40,12 @@ function MainPage() {
     }, []);
 
 
-  const handleSearch = (e) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    const filtered = fields.filter((field) =>
-      field.name.toLowerCase().includes(value.toLowerCase())
-    );
-    setFilteredFields(filtered);
-};
-
-
-  //REZERVASYON YAP TUŞUNA TIKLANDIĞINDA SAYFAYA YÖNLENDİR.
-  const handleReservation = () => {
-    navigate(`/reservations`);
+  //SAHA ARAMA
+  const handleSearch = (value) => {
+        setSearchTerm(value);
+        const filtered = fields.filter((field) =>
+          field.name.toLowerCase().includes(value.toLowerCase()));
+        setFilteredFields(filtered);
   };
 
 
@@ -65,6 +59,7 @@ function MainPage() {
         if (availableFields.length === 0) {
             toast.warning('Seçilen tarihte uygun saha bulunmamaktadır.');
         }
+        toast.info("Filtrelenecek Tarihi Seçtiniz...")
     } catch (error) {
         toast.error('Rezervasyon verileri alınırken hata oluştu.');
     } 
@@ -88,23 +83,28 @@ function MainPage() {
     setIsModalVisible(false);
   };
 
+   //REZERVASYON YAP TUŞUNA TIKLANDIĞINDA SAYFAYA YÖNLENDİR.
+  const handleReservation = () => {
+    navigate(`/reservations`);
+  };
 
   return (
     <>
       <Navbar/>
 
       <div style={{ display: 'flex', justifyContent: 'center', margin: '20px',marginRight:'70px' ,gap:'50px'}}>
-         <Input
-          placeholder="Halısaha Ara"
+        <Input.Search
+          placeholder="Halı Saha Ara..."
           value={searchTerm}
-          onChange={handleSearch}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onSearch={() => handleSearch(searchTerm)}
+          enterButton
           style={{ width: '385px', height: '35px' }}
         />
           <DatePicker onChange={handleDateChange} placeholder='Tarih Seçin' style={{ width: '300px',height:'35px',marginRight:'35px' }} />
       </div>
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center', padding: '20px' }}>
-
       {filteredFields.map((field) => (
 
         <Card
