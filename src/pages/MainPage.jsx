@@ -12,40 +12,40 @@ import '../css/MainPage.css'
 
 function MainPage() {
 
-   const [fields, setFields] = useState([]);
-   const [selectedDate, setSelectedDate] = useState(null);
-   const [selectedField, setSelectedField] = useState(null);
-   const [reservedTimes, setReservedTimes] = useState([]);
-   const [isModalVisible, setIsModalVisible] = useState(false);
-   const [searchTerm, setSearchTerm] = useState('');
-   const [filteredFields, setFilteredFields] = useState([]);
-   const navigate = useNavigate();
+  const [fields, setFields] = useState([]);
+  const [filteredFields, setFilteredFields] = useState([]);
+  const [selectedField, setSelectedField] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [reservedTimes, setReservedTimes] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  
+  const navigate = useNavigate();
 
-   //HALI SAHALARI DB'DEN ÇEK
-    useEffect(() => {
-        const fetchFields = async () => {
-            try {
-                const data = await getFields();
-                const parsedData = data.map((row) => ({
-                    id: row.id,
-                    name: row.name,
-                    price: row.price,
-                }));
-                setFields(parsedData);
-                setFilteredFields(parsedData)
-            } catch (error) {
-                toast.error("Halı sahalar yüklenirken bir hata oluştu.", error);}
-        };
-        fetchFields();
-    }, []);
+  //HALI SAHALARI DB'DEN ÇEK
+  useEffect(() => {
+    const fetchFields = async () => {
+    try {
+      const data = await getFields();
+      const parsedData = data.map((row) => ({
+        id: row.id,
+        name: row.name,
+        price: row.price,
+    }));
+    setFields(parsedData);
+    setFilteredFields(parsedData)
+  } catch (error) {
+      toast.error("Halı sahalar yüklenirken bir hata oluştu.", error);}
+  };
+  fetchFields();
+  }, []);
 
 
-  //SAHA ARAMA
+  //SAHA FİLTRELEME
   const handleSearch = (value) => {
-        setSearchTerm(value);
-        const filtered = fields.filter((field) =>
-          field.name.toLowerCase().includes(value.toLowerCase()));
-        setFilteredFields(filtered);
+    setSearchTerm(value);
+    const filtered = fields.filter((field) => field.name.toLowerCase().includes(value.toLowerCase()));
+    setFilteredFields(filtered);
   };
 
 
@@ -123,9 +123,9 @@ function MainPage() {
           </Button>
 
           <Button
-                  style={{ marginTop: '10px',marginLeft:'10px' }}
-                  onClick={() => handleShowDetails(field)}>
-                  Doluluk Saatlerini Gör
+            style={{ marginTop: '10px',marginLeft:'10px' }}
+            onClick={() => handleShowDetails(field)}>
+              Doluluk Saatlerini Gör
           </Button>
           
         </Card>

@@ -1,55 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { Form, Input, Button, message } from "antd";
-import { registerUser, getAllUsers } from "../services/auth";
+import { registerUser, getAllUsers,checkIfUserExists } from "../services/auth";
 import { toast, ToastContainer } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
 import img from '/images/saha2.jpg'
 
 const RegisterPage = () => {
 
-  const [users, setUsers] = useState([]); 
   const navigate = useNavigate();
-
-  //KULLANICILARI ÇEKME FONKSİYONU.
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await getAllUsers();
-        setUsers(response.data); 
-      } catch (error) {
-        message.error("Kullanıcılar yüklenirken bir hata oluştu!");
-      }
-    };
-    fetchUsers();
-  }, []);
-
-
-  // Aynı kullanıcı adı veya e-posta olup olmadığını kontrol eden fonksiyon
-  const checkIfUserExists = (username, email) => {
-    const isUsernameTaken = users.some((user) => user.username === username);
-    const isEmailTaken = users.some((user) => user.email === email);
-
-    if (isUsernameTaken) return "Bu kullanıcı adı zaten mevcut...";
-    if (isEmailTaken) return "Bu e-posta zaten mevcut...";
-    return null; 
-  };
-
 
   //Kullanıcı Adı ve E-Posta KONTROLÜ & YENİ KULLANICIYI KAYDETME İŞLEMİ
   const onFinish = async (values) => {
-    const validationError = checkIfUserExists(values.username, values.email);
-    if (validationError) {
-      toast.error(validationError);
-      return;
-    }
     try {
-      await registerUser(values);
-      navigate("/login")
+      const { username, email, password } = values;
+      
+      const userExists = await checkIfUserExists(username, email);
+      if (userExists) return;
+      await registerUser({ username, email, password });
+      navigate("/login");
     } catch (error) {
-      toast.error("Kullanıcı oluşturulurken bir hata oluştu.");
+      toast.error("Kayıt sırasında bir hata oluştu!");
     }
   };
-
 
   return (
     

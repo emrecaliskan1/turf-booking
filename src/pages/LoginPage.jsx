@@ -1,43 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { Form, Input, Button, message } from "antd";
-import {  getAllUsers } from "../services/auth"; 
+import {  validateUser } from "../services/auth"; 
 import { toast, ToastContainer } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
 import img from '/images/saha2.jpg';
 
 const LoginPage = () => {
-  const [users, setUsers] = useState([]);
   const navigate = useNavigate();
 
- 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await getAllUsers();
-        setUsers(response.data);
-      } catch (error) {
-        console.log(error)
-      }
-    };
-    fetchUsers();
-  }, []);
-
-
-  //GİRİŞ YAPMA İŞLEMİ & DB'DEKİ USERSLARI KONTROL ETME
   const onFinish = async (values) => {
     const { username, email, password } = values;
-
-    const user = users.find(
-      (user) => user.username === username || user.email === email
-    );
-    if (!user) {
-      toast.error("Kullanıcı bulunamadı.");
-      return;}
-    if (user.password !== password) {
-      toast.error("Kullanıcı adınız ya da şifreyiz yanlış !");
-      return;}
-    localStorage.setItem("currentUser", JSON.stringify(user));
-    navigate("/main"); 
+    const user = await validateUser(username, email, password);
+    if (user) {
+      localStorage.setItem("currentUser", JSON.stringify(user));
+      navigate("/main"); 
+    }
   };
 
 
