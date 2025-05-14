@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const URL = "https://sheetdb.io/api/v1/bhjvz1z32i565"
+const URL = "https://sheetdb.io/api/v1/ag380wjo0nyx6"
 
 export const getAllUsers = () => axios.get(URL);
 
@@ -9,17 +9,6 @@ export const registerUser = (userData) => {
   const userWithId = {id: generateRandomId(), ...userData  };
   return axios.post(URL, userWithId);
 };
-
-//EMAIL VE USERNAME KONTROLÜ
-export const checkUsernameEmail = async (value) => {
-  const queryParam = type === "email" ? `email=${value}` : `username=${value}`;
-
-  const response = await axios.get(`${URL}?${queryParam}`);
-  const data = await response.json();
-
-  return data.length > 0;  
-};
-
 
 //RANDOM ID ÜRETME
 export const generateRandomId = () => {

@@ -9,38 +9,19 @@ const { Header } = Layout;
 const Navbar = () => {
   
   const location = useLocation();
-  const [basketCount, setBasketCount] = useState(0);
   const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate();
   
-
-  //SEPETTEKİ BADGE GÜNCELLEMESİ İÇİN USEEFFECT
    useEffect(() => {
-    const storedCount = JSON.parse(localStorage.getItem("basketCount")) || 0;
-    setBasketCount(storedCount);
     const user = JSON.parse(localStorage.getItem("currentUser"));
     if (user) {
       setCurrentUser(user.username);
     }
   }, []);
 
-
-  // SEPET SAYISINI GÜNCELLE
-  const updateBasketCount = () => {
-    const storedCount = JSON.parse(localStorage.getItem("basketCount")) || 0;
-    setBasketCount(storedCount);
-  };
-
-  useEffect(() => {
-    window.updateBasketCount = updateBasketCount;
-  }, []);
-  
-
   //ÇIKIŞ YAP
   const handleLogout = () => {
     localStorage.removeItem("currentUser");
-    localStorage.removeItem("basket");
-    localStorage.removeItem("basketCount");
     setCurrentUser(null); 
     setBasketCount(0);
     navigate("/login");
@@ -72,9 +53,7 @@ const Navbar = () => {
         <Menu.Item key="/basket" style={{marginLeft:'620px'}}>
           <Link to="/basket"> 
             Sepet 
-            <Badge count={basketCount} showZero offset={[5, -5]}>
-              <ShoppingCartOutlined style={{ fontSize: '18px', color: '#fff' }} />
-            </Badge>
+            <ShoppingCartOutlined style={{ fontSize: '18px', color: '#fff',marginLeft:'5px' }} />
           </Link>
         </Menu.Item>
 

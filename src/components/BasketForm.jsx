@@ -128,8 +128,9 @@ function BasketForm() {
                 </div>
 
               <Button
-                  type="danger"
+                  type="primary"
                   size="small"
+                  style={{backgroundColor:'#ed4f4c'}}
                   onClick={() => handleRemoveFromBasket(item.id)}>
                   Sil
               </Button>
