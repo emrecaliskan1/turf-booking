@@ -17,3 +17,20 @@ body, html {
     color: white !important; 
 }
 
+:where(.css-dev-only-do-not-override-1m63z2v).ant-btn-variant-solid {
+    color: #fff;
+    background:  rgb(32, 146, 32) ;
+}
+
+.spin-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh; 
+}
+
+.ant-spin {
+  font-size: 30px; 
+  color: #60cf5c; 
+}
+

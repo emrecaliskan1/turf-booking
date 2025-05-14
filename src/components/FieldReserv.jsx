@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Form, Input, Select, DatePicker, TimePicker, Button } from 'antd';
+import { Card, Form, Select, DatePicker, TimePicker, Button } from 'antd';
 import { toast, ToastContainer } from 'react-toastify';
 import { getFields } from '../services/fieldsApi';
 import { getReservations } from '../services/reservations';
@@ -44,8 +44,6 @@ function FieldReserv() {
   const handleFieldChange = async (fieldId, date) => {
     const selectedField = fields.find(field => field.id === fieldId);
     if (!selectedField || !date) return;
-    console.log('Seçilen saha:', selectedField.name);
-    console.log('Seçilen tarih:', date.format('YYYY-MM-DD'));
     try {
       const reservations = await getReservations(selectedField.name.trim(), date.format('YYYY-MM-DD'));
 
@@ -55,7 +53,7 @@ function FieldReserv() {
         end: res.endTime,
       }));
       setAvailableHours(reservedTimes);
-      } catch (error) {
+      }catch (error) {
         toast.error("Rezervasyon verileri alınırken hata oluştu");
       }
 };

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, Button, List, Modal, Input, Form } from 'antd';
 import {deleteReservation, getUserReservations } from '../services/reservations';
 import { toast, ToastContainer } from 'react-toastify';
-import { addField,getFields } from '../services/fieldsApi';
+import { addField } from '../services/fieldsApi';
 import '../css/UserProfile.css'
 
 function Profile() {

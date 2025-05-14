@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Badge, Layout, Menu } from "antd";
 import { ShoppingCartOutlined , UserOutlined } from '@ant-design/icons';
 import { Link, useLocation , useNavigate } from "react-router-dom";
+import { getBasketByUser } from "../services/basketApi";
 import '../css/Navbar.css'
 
 const { Header } = Layout;
@@ -10,12 +11,14 @@ const Navbar = () => {
   
   const location = useLocation();
   const [currentUser, setCurrentUser] = useState(null);
+  const [basketCount, setBasketCount] = useState(0);
   const navigate = useNavigate();
-  
+
    useEffect(() => {
     const user = JSON.parse(localStorage.getItem("currentUser"));
     if (user) {
       setCurrentUser(user.username);
+      fetchBasketCount(user.id);
     }
   }, []);
 
@@ -26,6 +29,16 @@ const Navbar = () => {
     setBasketCount(0);
     navigate("/login");
   };
+
+  //SEPET BADGE'İ GÜNCELLEME
+  const fetchBasketCount = async (userId) => {
+    try {
+      const basketItems = await getBasketByUser(userId);
+      setBasketCount(basketItems.length);
+    }catch (error) {
+      console.error(error);
+    }};
+
 
   return (
 
@@ -53,7 +66,9 @@ const Navbar = () => {
         <Menu.Item key="/basket" style={{marginLeft:'620px'}}>
           <Link to="/basket"> 
             Sepet 
-            <ShoppingCartOutlined style={{ fontSize: '18px', color: '#fff',marginLeft:'5px' }} />
+            <Badge count={basketCount} offset={[5, -2]} style={{ backgroundColor: 'red' }}>
+              <ShoppingCartOutlined style={{ fontSize: '18px', color: '#fff', marginLeft: '5px' }} />
+            </Badge>
           </Link>
         </Menu.Item>
 

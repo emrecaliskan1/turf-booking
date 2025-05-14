@@ -5,10 +5,9 @@ import { toast, ToastContainer } from 'react-toastify';
 import { getBasketByUser,removeFromBasket,deleteBasket } from '../services/basketApi';
 import dayjs from 'dayjs';
 import Navbar from './Navbar';
-import '../css/Basket.css'
 import locale from 'antd/es/date-picker/locale/tr_TR';
 import AppFooter from './Footer';
-
+import '../css/Basket.css'
 
 function BasketForm() {
 
@@ -35,6 +34,10 @@ function BasketForm() {
 
  //ÖDEME İŞLEMİ && SHEETS'E KAYDETME
   const handlePayment = async () => {
+    if (basket.length === 0) {
+      toast.info("Sepetiniz boş! Lütfen önce rezervasyon ekleyin.");
+      return;
+    }
     try {
       for (const reservation of basket) {
         const formattedDate = dayjs(reservation.date).format("YYYY-MM-DD");
@@ -78,16 +81,23 @@ function BasketForm() {
     if (!value || /^[0-9]{16}$/.test(value)) {
       return Promise.resolve();
     }
-    return Promise.reject(new Error("Geçerli bir kart numarası girin (16 haneli sayı)!"));
+    return Promise.reject(new Error("Geçerli bir kart numarası girin! (16 haneli sayı)"));
   };
 
 
   //SON KULLANMA TARİHİ VALİDASYONU
-   const validateExpiryDate = (_, value) => {
+  const validateExpiryDate = (_, value) => {
     if (!value || dayjs(value, "MM/YY").isAfter(dayjs())) {
       return Promise.resolve();
     }
     return Promise.reject(new Error("Son kullanma tarihi bugünden büyük olmalıdır!"));
+  };
+
+  // Kredi Kartı Numarası ve CVV Girişlerini Sadece Sayı ile Sınırlama
+  const handleNumericInput = (e) => {
+    if (!/^[0-9]$/.test(e.key)) {
+      e.preventDefault();
+    }
   };
 
 
@@ -145,7 +155,7 @@ function BasketForm() {
             label="Kart Numarası"
             name="cardNumber"
             rules={[{ required: true, validator: validateCardNumber }]}>
-            <Input  placeholder="XXXX XXXX XXXX XXXX" maxLength={16}/>
+            <Input  placeholder="XXXX XXXX XXXX XXXX" maxLength={16} onKeyDown={handleNumericInput} />
           </Form.Item>
 
           <Form.Item
@@ -163,8 +173,8 @@ function BasketForm() {
           <Form.Item
             label="CVC"
             name="cvc"
-            rules={[{ required: true, message: "CVC girin!", pattern: /^[0-9]{3}$/ }]}>
-            <Input placeholder="XXX" maxLength={3} />
+            rules={[{ required: true, message: "CVC girin...", pattern: /^[0-9]{3}$/ }]}>
+            <Input placeholder="XXX" maxLength={3} onKeyDown={handleNumericInput} />
           </Form.Item>
 
           <Button type="primary" htmlType="submit" block style={{ backgroundColor: 'green', fontSize: '17px' }}>

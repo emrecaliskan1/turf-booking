@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { toast } from 'react-toastify';
 
 const URL = 'https://sheetdb.io/api/v1/ag380wjo0nyx6?sheet=basket';
 
@@ -43,6 +42,6 @@ try {
       const response = await axios.delete(`https://sheetdb.io/api/v1/ag380wjo0nyx6/id/${item.id}?sheet=basket`);
     }
   } catch (error) {
-    console.error('Sepet verileri silinirken hata oluştu:', error);
+    console.error(error);
   }
 };

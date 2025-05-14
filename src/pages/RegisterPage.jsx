@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Form, Input, Button, message } from "antd";
 import { registerUser, getAllUsers,checkIfUserExists } from "../services/auth";
 import { toast, ToastContainer } from 'react-toastify';
@@ -13,7 +13,6 @@ const RegisterPage = () => {
   const onFinish = async (values) => {
     try {
       const { username, email, password } = values;
-      
       const userExists = await checkIfUserExists(username, email);
       if (userExists) return;
       await registerUser({ username, email, password });
@@ -26,31 +25,12 @@ const RegisterPage = () => {
   return (
     
     <div
-      style={{
-        position: "sticky", 
-        width:"100%",
-        height: "100vh", 
-        backgroundImage:`url(${img})`, 
-        backgroundSize: "cover", 
-        backgroundPosition: "center", 
-        backgroundRepeat: "no-repeat", 
-      }}>
+      style={{position: "sticky", width:"100%",height: "100vh", backgroundImage:`url(${img})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat", }}>
 
       <div
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)", 
-          width:375,
-          padding: 30,
-          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-          borderRadius: 12,
-          backgroundColor: "rgba(255, 255, 255, 0.8)", 
-          zIndex: 10, 
-        }}
-      >
-        <h2 style={{ textAlign: "center", marginBottom: 20 }}>Üye Ol</h2>
+        style={{position: "absolute",top: "50%",left: "50%",transform: "translate(-50%, -50%)",  width:375, padding: 30,boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",borderRadius: 12,backgroundColor: "rgba(255, 255, 255, 0.8)", zIndex: 10, }}>
+        
+        <h2 style={{ textAlign: "center", marginBottom: 20 }}>Kayıt Ol</h2>
 
         <Form layout="vertical" onFinish={onFinish} initialValues={{ username: "", email: "", password: "" }}>
 

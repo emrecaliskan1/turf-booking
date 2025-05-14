@@ -18,7 +18,6 @@ export const addField = async (fieldData) => {
     }
 };
 
-
 // Halı saha bilgilerini Sheets'ten çekme
 export const getFields = async () => {
   try {
