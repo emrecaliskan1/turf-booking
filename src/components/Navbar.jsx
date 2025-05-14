@@ -45,7 +45,7 @@ const Navbar = () => {
     <Header style={{ backgroundColor: "#1a3622", padding: "0 40px" }}>
 
       <div className="logo" style={{ float: "left", color: "#fff", fontSize: 20, fontWeight: "bold", marginRight: "40px" }}>
-        <Link to="/main" style={{ color: "#fff" }}>Edirne Halı Saha Rezervasyonları</Link>
+        <Link to="/main" style={{ color: "#fff" }}>Çalışkan Halı Saha Rezervasyonları</Link>
       </div>
 
       <Menu

@@ -6,7 +6,7 @@ const Basket = () => {
 
   return (
     <>
-    <BasketForm />
+      <BasketForm />
     </>
   );
 };

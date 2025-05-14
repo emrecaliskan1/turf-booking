@@ -8,9 +8,9 @@ function UserProfile() {
 
   return (
     <>
-    <Navbar/>
-    <Profile />
-    <AppFooter/>
+      <Navbar/>
+      <Profile />
+      <AppFooter/>
     </>
   )
 }

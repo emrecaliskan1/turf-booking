@@ -129,6 +129,7 @@ function BasketForm() {
 
             <Card
                 key={index}
+                className='basket-card'
                 style={{ marginBottom: '10px', padding: '5px 10px' }}
                 bodyStyle={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>

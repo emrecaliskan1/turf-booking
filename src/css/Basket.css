@@ -4,3 +4,64 @@
     background-position: center;
     height: 100vh;
 }
+
+.basket-wrapper {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.basket-card {
+  margin-bottom: 15px;
+  margin-top: 5px;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.basket-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+
+.basket-card-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.basket-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.basket-card-info span {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.basket-card-price {
+  font-size: 18px;
+  color: #4caf50;
+}
+
+.basket-card-date {
+  font-size: 15px;
+  color: #666;
+}
+
+.basket-card button {
+  background-color: #ed4f4c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.basket-card button:hover {
+  background-color: #ff6961;
+}

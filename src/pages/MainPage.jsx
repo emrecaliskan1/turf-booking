@@ -91,70 +91,75 @@ function MainPage() {
   };
 
   return (
-    <>
+    <div className="page-container">
+
       <Navbar />
-
       {loading ? (<div className="spin-container"><Spin size="large" /></div>) 
-      : (
-        <>
-          <div style={{display: 'flex', justifyContent: 'center', margin: '20px', marginRight: '70px',gap: '50px',}}>
-            <Input.Search
-              placeholder="Halı Saha Ara..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              onSearch={() => handleSearch(searchTerm)}
-              enterButton
-              style={{ width: '385px', height: '35px' }}
-            />
-            <DatePicker
-              onChange={handleDateChange}
-              placeholder="Tarih Seçin"
-              style={{ width: '300px', height: '35px', marginRight: '35px' }}/>
-          </div>
+        : (
+          <div className="content">
+            <div style={{ display: 'flex', justifyContent: 'center', margin: '20px', gap: '50px' }}>
 
-          <div style={{display: 'flex',flexWrap: 'wrap',gap: '20px',justifyContent: 'center',padding: '20px',}}>
+              <Input.Search
+                placeholder="Halı Saha Ara..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onSearch={() => handleSearch(searchTerm)}
+                enterButton
+                style={{ width: '385px', height: '35px',marginLeft:'85px' }}
+              />
 
+              <DatePicker
+                onChange={handleDateChange}
+                placeholder="Tarih Seçin"
+                style={{ width: '300px', height: '35px',marginRight:'170px'}}
+              />
+            </div>
+
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center', padding: '20px' }}>
             {filteredFields.map((field) => (
+
               <Card
                 key={field.id}
                 title={field.name}
-                style={{width: 300,margin: '10px',textAlign: 'center',borderRadius: '10px',}}
+                style={{ width: 300, margin: '10px', textAlign: 'center', borderRadius: '10px' }}
                 hoverable>
                 <p style={{ fontSize: '15px' }}>{field.price} TL / Saat</p>
 
-                <Button
-                  className="custom-button"
-                  type="primary"
-                  onClick={() => handleReservation(field.id)}
-                  style={{ marginTop: '10px' }}>
-                  Rezervasyon Yap
-                </Button>
+                  <Button
+                    className='custom-button'
+                    type="primary"
+                    onClick={() => handleReservation(field.id)}
+                    style={{ marginTop: '10px' }}>
+                    Rezervasyon Yap
+                  </Button>
 
-                <Button
-                  style={{ marginTop: '10px', marginLeft: '10px' }}
-                  onClick={() => handleShowDetails(field)}>
-                  Doluluk Saatlerini Gör
-                </Button>
+                  <Button
+                    style={{ marginTop: '10px', marginLeft: '10px' }}
+                    onClick={() => handleShowDetails(field)}>
+                    Doluluk Saatlerini Gör
+                  </Button>
 
               </Card>
-            ))}
-          </div>
+          ))}
+        </div>
 
-          <Modal
-            title={`Dolu Saatler:  ${selectedField?.name}`}
-            open={isModalVisible}
-            onCancel={handleModalClose}
-            footer={null}>
-            {reservedTimes.length > 0 ? (reservedTimes.map((time, index) => <p key={index}>{time}</p>)) 
-            : (<p>Bu tarihte dolu saat bulunmamaktadır.</p>)}
-          </Modal>
-          
-        </>
-      )}
+        <Modal
+          title={`Dolu Saatler:  ${selectedField?.name}`}
+          open={isModalVisible}
+          onCancel={handleModalClose}
+          footer={null}>
+          {reservedTimes.length > 0 ? reservedTimes.map((time, index) => (
+            <p key={index}>{time}</p>
+          )) : (
+            <p>Bu tarihte dolu saat bulunmamaktadır.</p>
+          )}
+        </Modal>
+      </div>
+    )}
 
-      <AppFooter />
-      <ToastContainer autoClose={1000} />
-    </>
+    <AppFooter />
+    <ToastContainer autoClose={1000} />
+  </div>
   )
 }
 
