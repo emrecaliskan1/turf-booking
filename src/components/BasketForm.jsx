@@ -54,7 +54,7 @@ function BasketForm() {
         //REZERVASYONLAR TABLOSUNA EKLEME
         await addReservation(formattedReservation);
       }
-        //SEPET TABLOSUNDAN SİLME
+        //ÖDENEN REZERVASYONLARI SEPET TABLOSUNDAN SİLME
         await deleteBasket(currentUser.id); 
         setBasket([]);
         setPaymentSuccess(true); 
@@ -83,7 +83,6 @@ function BasketForm() {
     }
     return Promise.reject(new Error("Geçerli bir kart numarası girin! (16 haneli sayı)"));
   };
-
 
   //SON KULLANMA TARİHİ VALİDASYONU
   const validateExpiryDate = (_, value) => {
@@ -120,13 +119,13 @@ function BasketForm() {
   
   return (
     <>
-    <Navbar  />
+    <Navbar/>
 
      <div style={{ padding: '20px' }} className='basket-wrapper'>
 
       <Card title="Sepet" style={{ width: 650, margin: '0 auto' ,marginTop:'50px'}}>
-         {basket.length === 0 ? (<p>Sepetiniz boş.</p>) : (basket.map((item, index) => (
-
+         {basket.length === 0 ? (<p>Sepetiniz boş.</p>) 
+         : (basket.map((item, index) => (
             <Card
                 key={index}
                 className='basket-card'

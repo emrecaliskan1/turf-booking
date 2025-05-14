@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const URL = "https://sheetdb.io/api/v1/ag380wjo0nyx6?sheet=reservations"
+const URL = "https://sheetdb.io/api/v1/9slreximbznsz?sheet=reservations"
 
 //REZERVASYON EKLE
 export const addReservation = async (reservationData) => {
@@ -24,7 +24,7 @@ export const getReservations = async (fieldName, date) => {
     );
     return filteredData;
   } catch (error) {
-    console.error('Hata:', error);
+    console.error(error);
 }};
 
 //GİRİŞ YAPAN KULLANICININ REZERVASYONLARINI DÖNDÜR
@@ -43,7 +43,7 @@ export const getUserReservations = async (username) => {
 //REZERVASYON SİL
 export const deleteReservation = async (reservationId) => {
   try {
-    const response = await axios.delete(`https://sheetdb.io/api/v1/ag380wjo0nyx6/id/${reservationId}?sheet=reservations`);
+    const response = await axios.delete(`https://sheetdb.io/api/v1/9slreximbznsz/id/${reservationId}?sheet=reservations`);
     return response.data;
   } catch (error) {
     console.error('Rezervasyon silinirken hata oluştu:', error);

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const URL = 'https://sheetdb.io/api/v1/ag380wjo0nyx6?sheet=basket';
+const URL = 'https://sheetdb.io/api/v1/9slreximbznsz?sheet=basket';
 
 //REZERVASYON FORMUNDAN KULLACININ SEPETİNE EKLEME
 export const addToBasket = async (reservation) => {
@@ -27,7 +27,7 @@ export const getBasketByUser = async (userId) => {
 //SEPETTEN REZERVASYONU KALDIRMA
 export const removeFromBasket = async (reservationId) => {
 try {
-    const response = await axios.delete(`https://sheetdb.io/api/v1/ag380wjo0nyx6/id/${reservationId}?sheet=basket`);
+    const response = await axios.delete(`https://sheetdb.io/api/v1/9slreximbznsz/id/${reservationId}?sheet=basket`);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -39,7 +39,7 @@ export const deleteBasket = async (userId) => {
 try {
     const basketItems = await getBasketByUser(userId);
     for (const item of basketItems) {
-      const response = await axios.delete(`https://sheetdb.io/api/v1/ag380wjo0nyx6/id/${item.id}?sheet=basket`);
+      const response = await axios.delete(`https://sheetdb.io/api/v1/9slreximbznsz/id/${item.id}?sheet=basket`);
     }
   } catch (error) {
     console.error(error);

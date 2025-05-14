@@ -9,7 +9,7 @@ const RegisterPage = () => {
 
   const navigate = useNavigate();
 
-  //Kullanıcı Adı ve E-Posta KONTROLÜ & YENİ KULLANICIYI KAYDETME İŞLEMİ
+  //USERNAME VE EMAIL KONTROLÜ & YENİ KULLANICIYI KAYDETME İŞLEMİ
   const onFinish = async (values) => {
     try {
       const { username, email, password } = values;

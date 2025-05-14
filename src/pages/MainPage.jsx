@@ -51,17 +51,19 @@ function MainPage() {
   };
 
 
+  //SEÇİLEN TARİHİ KAYDEDER VE SAHALARIN DOLULUK SAATLERİNİ ONA GÖRE FİLTRELER
   const handleDateChange = async (date) => {
     setSelectedDate(date);
     try {
         const allReservations = await Promise.all(
             fields.map(field => getReservations(field.name.trim(), date.format('YYYY-MM-DD')))
         );
-        const availableFields = fields.filter((field, index) => allReservations[index].length === 0);
+        const availableFields = fields.filter((field,index) => allReservations[index].length === 0);
         if (availableFields.length === 0) {
             toast.warning('Seçilen tarihte uygun saha bulunmamaktadır.');
         }
-        toast.info("Filtrelenecek Tarihi Seçtiniz...")
+        else toast.info("Filtrelenecek Tarihi Seçtiniz...")
+        setFilteredFields(availableFields);
     } catch (error) {
         toast.error('Rezervasyon verileri alınırken hata oluştu.');
     } 
@@ -91,13 +93,14 @@ function MainPage() {
   };
 
   return (
-    <div className="page-container">
+    <>
+    <div className="field-container">
 
       <Navbar />
       {loading ? (<div className="spin-container"><Spin size="large" /></div>) 
         : (
           <div className="content">
-            <div style={{ display: 'flex', justifyContent: 'center', margin: '20px', gap: '50px' }}>
+            <div  style={{ display: 'flex', justifyContent: 'center', margin: '20px', gap: '50px' }}>
 
               <Input.Search
                 placeholder="Halı Saha Ara..."
@@ -148,18 +151,17 @@ function MainPage() {
           open={isModalVisible}
           onCancel={handleModalClose}
           footer={null}>
-          {reservedTimes.length > 0 ? reservedTimes.map((time, index) => (
-            <p key={index}>{time}</p>
-          )) : (
-            <p>Bu tarihte dolu saat bulunmamaktadır.</p>
-          )}
+          {reservedTimes.length > 0 ? reservedTimes.map((time, index) => (<p key={index}>{time}</p>)) 
+          : (<p>Bu tarihte dolu saat bulunmamaktadır.</p>)}
         </Modal>
       </div>
     )}
 
     <AppFooter />
-    <ToastContainer autoClose={1000} />
+    
   </div>
+  <ToastContainer autoClose={500} />
+  </>
   )
 }
 

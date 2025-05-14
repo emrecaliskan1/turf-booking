@@ -87,12 +87,10 @@ function FieldReserv() {
         (startTime <= start && endTime >= end)
       );
     });
-
     if (isTimeConflicted) {
       toast.error("Seçilen saat dilimi başka bir rezervasyonla çakışıyor.");
       return; 
     }
-
     try {
       await addToBasket(newBasket);
       form.resetFields();
@@ -115,8 +113,7 @@ function FieldReserv() {
       return (i >= start && i < end);
     });
     if (isTimeDisabled) {
-      disabledHours.push(i); 
-    }
+      disabledHours.push(i);}
     }
     return {
       disabledHours: () => disabledHours,
