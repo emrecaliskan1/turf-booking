@@ -5,7 +5,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import { addField } from '../services/fieldsApi';
 import '../css/UserProfile.css'
 
-function Profile() {
+const Profile = () => {
 
     const [reservations, setReservations] = useState([]);
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -86,7 +86,7 @@ function Profile() {
                     renderItem={(reservation) => (
 
                         <List.Item
-                            actions={[<Button type='primary' danger onClick={() => handleDelete(reservation.id)}>Sil</Button>]}>
+                            actions={[<Button type='primary' danger onClick={() => handleDelete(reservation.id)}>İptal Et</Button>]}>
                             {reservation.date} - {reservation.fieldName} - {reservation.startTime} - {reservation.endTime}
                         </List.Item>
                     )}

@@ -9,7 +9,7 @@ import locale from 'antd/es/date-picker/locale/tr_TR';
 import AppFooter from './Footer';
 import '../css/Basket.css'
 
-function BasketForm() {
+const BasketForm = () => {
 
   const [basket, setBasket] = useState([]);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
@@ -92,13 +92,12 @@ function BasketForm() {
     return Promise.reject(new Error("Son kullanma tarihi bugünden büyük olmalıdır!"));
   };
 
-  // Kredi Kartı Numarası ve CVV Girişlerini Sadece Sayı ile Sınırlama
+  //KART VE CVV GİRİŞLERİNİ SAYI İLE SINIRLAMA
   const handleNumericInput = (e) => {
     if (!/^[0-9]$/.test(e.key)) {
       e.preventDefault();
     }
   };
-
 
   //ÖDEME BAŞARILI OLURSA ÇIKACAK EKRAN
    if (paymentSuccess) {
@@ -112,8 +111,7 @@ function BasketForm() {
         extra={[
           <Button type="primary" key="main" href="/main" style={{ backgroundColor: 'green', fontSize: '17px' }} >
             Ana Sayfaya Dön
-          </Button>]}
-      />
+          </Button>]}/>
       </>
     )}
   

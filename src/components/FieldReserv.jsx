@@ -7,7 +7,7 @@ import { addToBasket } from '../services/basketApi';
 import { useLocation } from 'react-router-dom';
 import '../css/FieldReserv.css'
 
-function FieldReserv() {
+const FieldReserv = () => {
 
   const location = useLocation();
   const selectedFieldFromNav = location.state?.selectedField;
@@ -66,7 +66,7 @@ function FieldReserv() {
 
   
 
-  //REZERVASYONU SEPETE KAYDET & ÇAKIŞAN SAAT ARALIKLARINA UYARI VER
+  //REZERVASYONU SEPETE KAYDET 
   const handleSubmit = async (values) => {
     const { fieldId, date, start, end } = values;
     const field = fields.find((field) => field.id === fieldId);
@@ -84,19 +84,6 @@ function FieldReserv() {
       endTime: endTime,
       totalPrice: total,
     };
-
-    //ÇAKIŞAN SAATLERİ KONTROL ET
-    const isTimeConflicted = availableHours.some(({ start, end }) => {
-      return (
-        (startTime >= start && startTime < end) ||
-        (endTime > start && endTime <= end) ||
-        (startTime <= start && endTime >= end)
-      );
-    });
-    if (isTimeConflicted) {
-      toast.error("Seçilen saat dilimi başka bir rezervasyonla çakışıyor.");
-      return; 
-    }
     try {
       await addToBasket(newBasket);
       form.resetFields();
@@ -173,8 +160,7 @@ function FieldReserv() {
               minuteStep={60}
               onChange={(time) => setStartTime(time)}
               disabledHours={() => disabledTime(true)}
-              style={{ width: '100%' }}
-            />
+              style={{ width: '100%' }}/>
           </Form.Item>
 
           <Form.Item name="end" label="Bitiş Saati" rules={[{ required: true }]}>
@@ -183,8 +169,7 @@ function FieldReserv() {
               minuteStep={60}
               disabled={!startTime}
               disabledHours={getDisabledEndHours}
-              style={{ width: '100%' }}
-            />
+              style={{ width: '100%' }}/>
           </Form.Item>
 
           <Form.Item>
@@ -197,7 +182,7 @@ function FieldReserv() {
 
        
       </Card>
-      <ToastContainer autoClose={700} />
+      <ToastContainer autoClose={500} />
     </div>
   )
 }

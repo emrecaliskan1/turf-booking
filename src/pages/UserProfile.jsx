@@ -4,7 +4,7 @@ import '../css/UserProfile.css'
 import Profile from '../components/Profile';
 import AppFooter from '../components/Footer';
 
-function UserProfile() {
+const UserProfile = () => {
 
   return (
     <>

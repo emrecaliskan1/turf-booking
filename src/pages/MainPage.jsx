@@ -10,7 +10,7 @@ import '../css/FieldReserv.css'
 import '../css/MainPage.css'
 
 
-function MainPage() {
+const MainPage = () => {
 
   const [fields, setFields] = useState([]);
   const [filteredFields, setFilteredFields] = useState([]);
@@ -22,6 +22,7 @@ function MainPage() {
   const [loading, setLoading] = useState(true); 
   
   const navigate = useNavigate();
+
 
   //HALI SAHALARI DB'DEN ÇEK
   useEffect(() => {
@@ -46,7 +47,10 @@ function MainPage() {
   //SAHA FİLTRELEME
   const handleSearch = (value) => {
     setSearchTerm(value);
-    const filtered = fields.filter((field) => field.name.toLowerCase().includes(value.toLowerCase()));
+    const filtered = fields.filter((field) => field.name.toLowerCase().includes(value.toLowerCase())).map((field) => {
+      const existingField = filteredFields.find(f => f.id === field.id);
+      return existingField ? { ...field, isAvailable: existingField.isAvailable } : field;
+    });
     setFilteredFields(filtered);
   };
 
@@ -54,22 +58,27 @@ function MainPage() {
   //SEÇİLEN TARİHİ KAYDEDER VE SAHALARIN DOLULUK SAATLERİNİ ONA GÖRE FİLTRELER
   const handleDateChange = async (date) => {
     setSelectedDate(date);
+    if (!date) {
+      setFilteredFields(fields.map(field => ({ ...field, isAvailable: true })));
+      return;
+    }
     try {
-        const allReservations = await Promise.all(
-            fields.map(field => getReservations(field.name.trim(), date.format('YYYY-MM-DD')))
-        );
-        const availableFields = fields.filter((field,index) => allReservations[index].length === 0);
-        if (availableFields.length === 0) {
-            toast.warning('Seçilen tarihte uygun saha bulunmamaktadır.');
-        }
-        else toast.info("Filtrelenecek Tarihi Seçtiniz...")
-        setFilteredFields(availableFields);
-    } catch (error) {
-        toast.error('Rezervasyon verileri alınırken hata oluştu.');
-    } 
-  };
+      const allReservations = await Promise.all(
+        fields.map(field => getReservations(field.name.trim(), date.format('YYYY-MM-DD')))
+      );
+      // Tüm sahaları güncellenmiş doluluk bilgisiyle sakla
+      const updatedFields = fields.map((field, index) => ({
+        ...field,
+        isAvailable: allReservations[index].length === 0, 
+    }));
+    setFilteredFields(updatedFields);
+    toast.info("Filtrelenecek Tarihi Seçtiniz...");
+    }catch (error) {
+    toast.error('Rezervasyon verileri alınırken hata oluştu.');
+    }};
 
   
+
   //DOLULUK ORANINI GÖR TUŞU
   const handleShowDetails = async (field) => {
     try {
@@ -91,6 +100,8 @@ function MainPage() {
   const handleReservation = (field) => {
     navigate(`/reservations`, { state: { selectedField: field } });
   };
+
+
 
   return (
     <>
@@ -124,7 +135,7 @@ function MainPage() {
               <Card
                 key={field.id}
                 title={field.name}
-                style={{ width: 300, margin: '10px', textAlign: 'center', borderRadius: '10px' }}
+                style={{ width: 300, margin: '10px', textAlign: 'center', borderRadius: '10px' , backgroundColor: field.isAvailable === false ? '#f5c6c6' : '#fff'}}
                 hoverable>
                 <p style={{ fontSize: '15px' }}>{field.price} TL / Saat</p>
 
@@ -144,8 +155,8 @@ function MainPage() {
 
               </Card>
           ))}
-        </div>
 
+        </div>
         <Modal
           title={`Dolu Saatler:  ${selectedField?.name}`}
           open={isModalVisible}
@@ -155,12 +166,13 @@ function MainPage() {
           : (<p>Bu tarihte dolu saat bulunmamaktadır.</p>)}
         </Modal>
       </div>
+
     )}
 
     <AppFooter />
-    
+    <ToastContainer autoClose={600} closeOnClick />
   </div>
-  <ToastContainer autoClose={500} />
+ 
   </>
   )
 }
