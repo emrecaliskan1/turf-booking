@@ -9,12 +9,14 @@ import '../css/FieldReserv.css'
 
 function FieldReserv() {
 
-   const location = useLocation();
-    const selectedFieldFromNav = location.state?.selectedField; // Gelen saha bilgisi
+  const location = useLocation();
+  const selectedFieldFromNav = location.state?.selectedField;
+  const [startTime, setStartTime] = useState(null);
   const [fields, setFields] = useState([]);
   const [form] = Form.useForm();
   const [availableHours, setAvailableHours] = useState([]);
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
 
   //HALISAHALARI SHEETS'TEN ÇEKEREK SELECT EKRANINDA GÖSTERME.
   useEffect(() => {
@@ -27,7 +29,6 @@ function FieldReserv() {
           pricePerHour: parseInt(row.price, 10),
         }));
         setFields(parsedData);
-        // Eğer yönlendirme ile gelen bir saha varsa formda varsayılan olarak ayarla
         if (selectedFieldFromNav) {
           form.setFieldsValue({ fieldId: selectedFieldFromNav.id });
         }
@@ -53,8 +54,6 @@ function FieldReserv() {
     if (!selectedField || !date) return;
     try {
       const reservations = await getReservations(selectedField.name.trim(), date.format('YYYY-MM-DD'));
-
-      // Saatlerin rezervasyonlu olup olmadığını kontrol et
       const reservedTimes = reservations.map(res => ({
         start: res.startTime,
         end: res.endTime,
@@ -69,11 +68,11 @@ function FieldReserv() {
 
   //REZERVASYONU SEPETE KAYDET & ÇAKIŞAN SAAT ARALIKLARINA UYARI VER
   const handleSubmit = async (values) => {
-    const { fieldId, date, timeRange } = values;
-    const field = fields.find(field => field.id === fieldId);
-    const startTime = timeRange[0].format('HH:mm');
-    const endTime = timeRange[1].format('HH:mm');
-    const hours = timeRange[1].hour() - timeRange[0].hour();
+    const { fieldId, date, start, end } = values;
+    const field = fields.find((field) => field.id === fieldId);
+    const startTime = start.format('HH:mm');
+    const endTime = end.format('HH:mm');
+    const hours = end.hour() - start.hour();
     const total = hours * field.pricePerHour;
 
     const newBasket = {
@@ -107,32 +106,44 @@ function FieldReserv() {
     }
 };
 
-  //MÜSAİT OLMAYAN SAATLERİ DİSABLE OLARAK GÖSTERMEK İÇİN
-  const disabledTime = () => {
-    const reservedHours = availableHours.map(({ start, end }) => ({
-      start: parseInt(start.split(':')[0], 10),
-      end: parseInt(end.split(':')[0], 10),  
-    }));
+  //SAATLERİ DISABLE OLARAK AYARLAMA
+  const disabledTime = (isStart) => {
     const disabledHours = [];
-    // Saat aralıklarının çakışıp çakışmadığını kontrol et
     for (let i = 0; i < 24; i++) {
-      const isTimeDisabled = reservedHours.some(({ start, end }) => {
-      return (i >= start && i < end);
-    });
-    if (isTimeDisabled) {
-      disabledHours.push(i);}
+      const isDisabled = availableHours.some(({ start, end }) => {
+        const startHour = parseInt(start.split(':')[0], 10);
+        const endHour = parseInt(end.split(':')[0], 10);
+        return isStart ? (i >= startHour && i < endHour) : (i >= startHour && i <= endHour);
+      });
+      if (isDisabled) disabledHours.push(i);
     }
-    return {
-      disabledHours: () => disabledHours,
-      disabledMinutes: (hour) => {
-      if (disabledHours.includes(hour)) {
-        return Array.from({ length: 60 }, (_, index) => index);
-      }
-      return [];
-    }
-  };
-  };
+    return disabledHours;
+    };
 
+
+  //BİTİŞ SAATİ SEÇME KISMINDAKİ DISABLE AYARLARI
+  const getDisabledEndHours = () => {
+    if (!startTime) return [];
+    const startHour = startTime.hour();
+    const disabledHours = [];
+
+    for (let hour = 0; hour < 24; hour++) {
+      if (hour <= startHour) {
+        disabledHours.push(hour);
+        continue;
+      }
+        // Eğer bitiş saati seçildiğinde, başlangıç-bitiş aralığı herhangi bir rezervasyonla çakışıyorsa disabled
+      const conflict = availableHours.some(({ start, end }) => {
+        const resStart = parseInt(start.split(':')[0], 10);
+        const resEnd = parseInt(end.split(':')[0], 10);
+        return !(hour <= resStart || startHour >= resEnd);
+    });
+    if (conflict) {
+      disabledHours.push(hour);
+    }
+  }
+  return disabledHours;
+  };
 
   return (
     <div className="reservation-wrapper">
@@ -156,12 +167,24 @@ function FieldReserv() {
             placeholder='Tarih Seçin'  style={{ width: '100%' }} />
           </Form.Item>
 
-          <Form.Item name="timeRange" label="Saat Aralığı" rules={[{ required: true }]}>
-            <TimePicker.RangePicker 
-            format="HH:mm"
-            minuteStep={60} 
-            {...disabledTime()}
-            style={{ width: '100%' }} />
+          <Form.Item name="start" label="Başlangıç Saati" rules={[{ required: true }]}>
+            <TimePicker
+              format="HH:mm"
+              minuteStep={60}
+              onChange={(time) => setStartTime(time)}
+              disabledHours={() => disabledTime(true)}
+              style={{ width: '100%' }}
+            />
+          </Form.Item>
+
+          <Form.Item name="end" label="Bitiş Saati" rules={[{ required: true }]}>
+            <TimePicker
+              format="HH:mm"
+              minuteStep={60}
+              disabled={!startTime}
+              disabledHours={getDisabledEndHours}
+              style={{ width: '100%' }}
+            />
           </Form.Item>
 
           <Form.Item>
