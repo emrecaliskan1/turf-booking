@@ -6,8 +6,7 @@ const URL ="https://sheetdb.io/api/v1/vx8mvvhmwu325"
 export const addField = async (fieldData) => {
   try {
     const formattedData = {
-      data: [{id: fieldData.id,name: fieldData.name,price: fieldData.price}
-      ]
+      data: [{id: fieldData.id,name: fieldData.name,price: fieldData.price}]
     };
     const response = await axios.post(`${URL}?sheet=fields`, formattedData, {
       headers: {'Content-Type': 'application/json',},

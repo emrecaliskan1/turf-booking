@@ -1,6 +1,6 @@
 import React from "react";
-import { Form, Input, Button, message } from "antd";
-import { registerUser, getAllUsers,checkIfUserExists } from "../services/auth";
+import { Form, Input, Button } from "antd";
+import { registerUser,checkIfUserExists } from "../services/auth";
 import { toast, ToastContainer } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
 import img from '/images/saha2.jpg'

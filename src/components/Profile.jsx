@@ -89,9 +89,9 @@ const Profile = () => {
                             actions={[<Button type='primary' danger onClick={() => handleDelete(reservation.id)}>İptal Et</Button>]}>
                             {reservation.date} - {reservation.fieldName} - {reservation.startTime} - {reservation.endTime}
                         </List.Item>
-                    )}
-                    
+                    )} 
                 />
+                
                  {isAdmin && (
                     <Button
                         type="dashed"

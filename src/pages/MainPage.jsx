@@ -55,7 +55,7 @@ const MainPage = () => {
   };
 
 
-  //SEÇİLEN TARİHİ KAYDEDER VE SAHALARIN DOLULUK SAATLERİNİ ONA GÖRE FİLTRELER
+  //SEÇİLEN TARİHİ KAYDEDER VE SAHALARIN DOLULUK SAATLERİNİ ONA GÖRE FİLTRELER. (Seçilen tarihtee doluluk olan sahalar kırmızı renkte gösterilecek)
   const handleDateChange = async (date) => {
     setSelectedDate(date);
     if (!date) {
@@ -66,7 +66,7 @@ const MainPage = () => {
       const allReservations = await Promise.all(
         fields.map(field => getReservations(field.name.trim(), date.format('YYYY-MM-DD')))
       );
-      // Tüm sahaları güncellenmiş doluluk bilgisiyle sakla
+      //Her saha üzerinde gezilir ve o tarihe ait rezervasyon bilgisi var ise isAvailable :False yapılır. Yok ise True yapılır.
       const updatedFields = fields.map((field, index) => ({
         ...field,
         isAvailable: allReservations[index].length === 0, 
@@ -142,7 +142,7 @@ const MainPage = () => {
                   <Button
                     className='custom-button'
                     type="primary"
-                     onClick={() => handleReservation(field)}
+                    onClick={() => handleReservation(field)}
                     style={{ marginTop: '10px' }}>
                     Rezervasyon Yap
                   </Button>

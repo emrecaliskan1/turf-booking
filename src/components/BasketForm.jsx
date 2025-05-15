@@ -171,7 +171,7 @@ const BasketForm = () => {
           <Form.Item
             label="CVC"
             name="cvc"
-            rules={[{ required: true, message: "3 Haneli CVV giriniz...", pattern: /^[0-9]{3}$/ }]}>
+            rules={[{ required: true, message: "3 Haneli CVC giriniz...", pattern: /^[0-9]{3}$/ }]}>
             <Input placeholder="XXX" maxLength={3} onKeyDown={handleNumericInput} />
           </Form.Item>
 

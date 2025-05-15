@@ -48,7 +48,7 @@ const FieldReserv = () => {
   };
 
 
-  //REZERVASYON MÜSAİTLİK DURUMU KONTROLLERİ
+  //KULLANICININ SEÇTİĞİ SAHA VE TARİHE GÖRE DOLU SAAT ARALIKLARINI BELİRLE
   const handleFieldChange = async (fieldId, date) => {
     const selectedField = fields.find(field => field.id === fieldId);
     if (!selectedField || !date) return;
@@ -93,7 +93,7 @@ const FieldReserv = () => {
     }
 };
 
-  //SAATLERİ DISABLE OLARAK AYARLAMA
+  //TARİH VE SAHAYA GÖRE DOLU SAAT ARALIKLARINI ENGELLE (Saat aralıklarını availableHours ile karşılaştırır.)
   const disabledTime = (isStart) => {
     const disabledHours = [];
     for (let i = 0; i < 24; i++) {
@@ -117,9 +117,9 @@ const FieldReserv = () => {
     for (let hour = 0; hour < 24; hour++) {
       if (hour <= startHour) {
         disabledHours.push(hour);
-        continue;
-      }
-        // Eğer bitiş saati seçildiğinde, başlangıç-bitiş aralığı herhangi bir rezervasyonla çakışıyorsa disabled
+        continue;}
+
+      // Eğer bitiş saati seçildiğinde, başlangıç-bitiş aralığı herhangi bir rezervasyonla çakışıyorsa disabled
       const conflict = availableHours.some(({ start, end }) => {
         const resStart = parseInt(start.split(':')[0], 10);
         const resEnd = parseInt(end.split(':')[0], 10);
@@ -131,6 +131,7 @@ const FieldReserv = () => {
   }
   return disabledHours;
   };
+
 
   return (
     <div className="reservation-wrapper">
@@ -151,7 +152,7 @@ const FieldReserv = () => {
           <Form.Item name="date" label="Tarih" rules={[{ required: true }]}>
             <DatePicker 
              onChange={(date) => handleFieldChange(form.getFieldValue('fieldId'), date)}
-            placeholder='Tarih Seçin'  style={{ width: '100%' }} />
+             placeholder='Tarih Seçin'  style={{ width: '100%' }} />
           </Form.Item>
 
           <Form.Item name="start" label="Başlangıç Saati" rules={[{ required: true }]}>
