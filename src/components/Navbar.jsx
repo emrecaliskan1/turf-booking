@@ -75,7 +75,7 @@ const Navbar = () => {
          {currentUser && (
           <Menu.Item key="user" style={{ display: 'flex', alignItems: 'center',marginLeft:'5px' } }>
              <Link to="/profile"> 
-            <UserOutlined style={{ fontSize: '20px', color: '#fff', marginRight: '3px' }} />
+            <UserOutlined style={{ fontSize: '20px', color: '#fff', marginRight: '-5  px' }} />
             <span style={{ color: '#fff' }}>{currentUser}</span>
             </Link>
           </Menu.Item>

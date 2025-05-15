@@ -54,7 +54,7 @@ function Profile() {
             toast.error("Lütfen tüm alanları doldurun.");
             return;}
         try {
-            await addField({id:Math.floor(100 + Math.random()*90), name:fieldName, price: fieldPrice });
+            await addField({id:Math.floor(100 + Math.random()*900), name:fieldName, price: fieldPrice });
             toast.success("Halı saha başarıyla eklendi.");
             handleCancel();
         } catch (error) {
