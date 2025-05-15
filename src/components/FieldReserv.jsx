@@ -4,10 +4,13 @@ import { toast, ToastContainer } from 'react-toastify';
 import { getFields } from '../services/fieldsApi';
 import { getReservations } from '../services/reservations';
 import { addToBasket } from '../services/basketApi';
+import { useLocation } from 'react-router-dom';
 import '../css/FieldReserv.css'
 
 function FieldReserv() {
 
+   const location = useLocation();
+    const selectedFieldFromNav = location.state?.selectedField; // Gelen saha bilgisi
   const [fields, setFields] = useState([]);
   const [form] = Form.useForm();
   const [availableHours, setAvailableHours] = useState([]);
@@ -24,6 +27,10 @@ function FieldReserv() {
           pricePerHour: parseInt(row.price, 10),
         }));
         setFields(parsedData);
+        // Eğer yönlendirme ile gelen bir saha varsa formda varsayılan olarak ayarla
+        if (selectedFieldFromNav) {
+          form.setFieldsValue({ fieldId: selectedFieldFromNav.id });
+        }
       } catch (error) {
         toast.error("Halı sahalar yüklenirken bir hata oluştu.");
       }
@@ -103,8 +110,8 @@ function FieldReserv() {
   //MÜSAİT OLMAYAN SAATLERİ DİSABLE OLARAK GÖSTERMEK İÇİN
   const disabledTime = () => {
     const reservedHours = availableHours.map(({ start, end }) => ({
-    start: parseInt(start.split(':')[0], 10),
-    end: parseInt(end.split(':')[0], 10),  
+      start: parseInt(start.split(':')[0], 10),
+      end: parseInt(end.split(':')[0], 10),  
     }));
     const disabledHours = [];
     // Saat aralıklarının çakışıp çakışmadığını kontrol et
@@ -139,6 +146,7 @@ function FieldReserv() {
               options={fields.map(field => ({ label: field.name, value: field.id }))}
               placeholder="Bir saha seçin"
               onChange={() => form.setFieldsValue({ date: null, timeRange: null })}
+              defaultValue={selectedFieldFromNav?.id}
             />
           </Form.Item>
 

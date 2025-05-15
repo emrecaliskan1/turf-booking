@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const URL ="https://sheetdb.io/api/v1/9slreximbznsz?sheet=fields"
+const URL ="https://sheetdb.io/api/v1/9slreximbznsz"
 
 // Halı saha bilgilerini Sheets'e ekleme
 export const addField = async (fieldData) => {
@@ -9,7 +9,7 @@ export const addField = async (fieldData) => {
       data: [{id: fieldData.id,name: fieldData.name,price: fieldData.price}
       ]
     };
-    const response = await axios.post(URL, formattedData, {
+    const response = await axios.post(`${URL}?sheet=fields`, formattedData, {
       headers: {'Content-Type': 'application/json',},
     });
     return response.data;
@@ -21,7 +21,7 @@ export const addField = async (fieldData) => {
 // Halı saha bilgilerini Sheets'ten çekme
 export const getFields = async () => {
   try {
-    const response = await axios.get(URL);
+    const response = await axios.get(`${URL}?sheet=fields`);
     return response.data;
   } catch (error) {
     console.error("Halı saha verileri alınamadı:",error);

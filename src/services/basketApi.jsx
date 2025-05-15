@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-const URL = 'https://sheetdb.io/api/v1/9slreximbznsz?sheet=basket';
+const URL = 'https://sheetdb.io/api/v1/9slreximbznsz';
 
-//REZERVASYON FORMUNDAN KULLACININ SEPETİNE EKLEME
+//REZERVASYON FORMUNDAN KULLANICININ SEPETİNE EKLEME
 export const addToBasket = async (reservation) => {
   try {
-    const response = await axios.post(`${URL}`, { data: reservation });
+    const response = await axios.post(`${URL}?sheet=basket`, { data: reservation });
     return response.data;
   } catch (error) {
     console.log(error)
@@ -15,7 +15,7 @@ export const addToBasket = async (reservation) => {
 //KULLANICININ SEPETİNİ ÇEKME
 export const getBasketByUser = async (userId) => {
   try {
-    const response = await axios.get(URL);
+    const response = await axios.get(`${URL}?sheet=basket`);
     const data = response.data;
     const filteredData = data.filter((basketItem) => basketItem.userId == userId);
     return filteredData;
@@ -27,7 +27,7 @@ export const getBasketByUser = async (userId) => {
 //SEPETTEN REZERVASYONU KALDIRMA
 export const removeFromBasket = async (reservationId) => {
 try {
-    const response = await axios.delete(`https://sheetdb.io/api/v1/9slreximbznsz/id/${reservationId}?sheet=basket`);
+    const response = await axios.delete(`${URL}/id/${reservationId}?sheet=basket`);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -39,7 +39,7 @@ export const deleteBasket = async (userId) => {
 try {
     const basketItems = await getBasketByUser(userId);
     for (const item of basketItems) {
-      const response = await axios.delete(`https://sheetdb.io/api/v1/9slreximbznsz/id/${item.id}?sheet=basket`);
+      const response = await axios.delete(`${URL}/id/${item.id}?sheet=basket`);
     }
   } catch (error) {
     console.error(error);

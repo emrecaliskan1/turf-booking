@@ -88,8 +88,8 @@ function MainPage() {
   };
 
    //REZERVASYON YAP TUŞUNA TIKLANDIĞINDA SAYFAYA YÖNLENDİR.
-  const handleReservation = () => {
-    navigate(`/reservations`);
+  const handleReservation = (field) => {
+    navigate(`/reservations`, { state: { selectedField: field } });
   };
 
   return (
@@ -131,7 +131,7 @@ function MainPage() {
                   <Button
                     className='custom-button'
                     type="primary"
-                    onClick={() => handleReservation(field.id)}
+                     onClick={() => handleReservation(field)}
                     style={{ marginTop: '10px' }}>
                     Rezervasyon Yap
                   </Button>

@@ -9,7 +9,7 @@ function Profile() {
 
     const [reservations, setReservations] = useState([]);
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-
+    const [isAdmin, setIsAdmin] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [fieldName, setFieldName] = useState('');
     const [fieldPrice, setFieldPrice] = useState('');
@@ -27,6 +27,13 @@ function Profile() {
         };
         fetchUserReservations();
     }, []);
+
+    //KULLANICI ADMİN Mİ?
+    useEffect(() => {
+        if (currentUser?.username === 'admin') {
+            setIsAdmin(true);
+        }
+    }, [currentUser]);
 
 
     //REZERVASYON SİLME
@@ -85,9 +92,14 @@ function Profile() {
                     )}
                     
                 />
-                 <Button type="dashed" onClick={showModal} style={{ marginTop: '40px' ,marginLeft:'700px',backgroundColor:'#ffde91'}}>
-                    Halı Saha Ekle
-                </Button>
+                 {isAdmin && (
+                    <Button
+                        type="dashed"
+                        onClick={showModal}
+                        style={{ marginTop: '40px', marginLeft: '620px', backgroundColor: '#ffde91' }}>
+                        Veritabanına Halı Saha Ekle
+                    </Button>
+                )}
 
             </Card>
 

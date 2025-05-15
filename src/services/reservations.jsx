@@ -1,11 +1,11 @@
 import axios from 'axios'
 
-const URL = "https://sheetdb.io/api/v1/9slreximbznsz?sheet=reservations"
+const URL = "https://sheetdb.io/api/v1/9slreximbznsz"
 
 //REZERVASYON EKLE
 export const addReservation = async (reservationData) => {
   try {
-    const response = await axios.post(URL, { data: [reservationData] }, {
+    const response = await axios.post(`${URL}?sheet=reservations`, { data: [reservationData] }, {
       headers: {'Content-Type': 'application/json',}
     });
     return response.data;
@@ -16,7 +16,7 @@ export const addReservation = async (reservationData) => {
 //REZERVASYONLARI ÇEK
 export const getReservations = async (fieldName, date) => {
   try {
-    const response = await axios.get(URL);
+    const response = await axios.get(`${URL}?sheet=reservations`);
     const data = response.data;
     const filteredData = data.filter(
       (reservation) => 
@@ -30,7 +30,7 @@ export const getReservations = async (fieldName, date) => {
 //GİRİŞ YAPAN KULLANICININ REZERVASYONLARINI DÖNDÜR
 export const getUserReservations = async (username) => {
   try {
-    const response = await axios.get(URL);
+    const response = await axios.get(`${URL}?sheet=reservations`);
     const data = response.data;
     const filteredData = data.filter(
       (reservation) => reservation.username === username
@@ -43,7 +43,7 @@ export const getUserReservations = async (username) => {
 //REZERVASYON SİL
 export const deleteReservation = async (reservationId) => {
   try {
-    const response = await axios.delete(`https://sheetdb.io/api/v1/9slreximbznsz/id/${reservationId}?sheet=reservations`);
+    const response = await axios.delete(`${URL}/id/${reservationId}?sheet=reservations`);
     return response.data;
   } catch (error) {
     console.error('Rezervasyon silinirken hata oluştu:', error);
