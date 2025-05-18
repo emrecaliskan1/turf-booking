@@ -1,7 +1,7 @@
 import axios from "axios";
 import { toast } from 'react-toastify';
 
-const URL = "https://sheetdb.io/api/v1/vx8mvvhmwu325"
+const URL = "https://sheetdb.io/api/v1/580cjmpuo8jkc"
 
 //TÜM KULLANICILARI ÇEK
 export const getAllUsers = async () => {

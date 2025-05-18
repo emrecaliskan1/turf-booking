@@ -55,7 +55,7 @@ const MainPage = () => {
   };
 
 
-  //SEÇİLEN TARİHİ KAYDEDER VE SAHALARIN DOLULUK SAATLERİNİ ONA GÖRE FİLTRELER. (Seçilen tarihtee doluluk olan sahalar kırmızı renkte gösterilecek)
+  //SEÇİLEN TARİHİ KAYDEDER VE SAHALARIN DOLULUK SAATLERİNİ ONA GÖRE FİLTRELER. (Seçilen tarihte doluluk olan sahalar kırmızı renkte gösterilecek)
   const handleDateChange = async (date) => {
     setSelectedDate(date);
     if (!date) {

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const URL = 'https://sheetdb.io/api/v1/vx8mvvhmwu325';
+const URL = 'https://sheetdb.io/api/v1/580cjmpuo8jkc';
 
 //REZERVASYON FORMUNDAN KULLANICININ SEPETİNE EKLEME
 export const addToBasket = async (reservation) => {
